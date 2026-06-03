@@ -1,20 +1,104 @@
-<h1>{{ settings.full_name }}</h1>
-<p>{{ settings.position }}</p>
+{% extends 'base.html' %}
 
-<h2>Проекты</h2>
+{% block content %}
 
-{% for project in projects %}
-    <h3>{{ project.title }}</h3>
-    <p>{{ project.short_description }}</p>
-    <p>{{ project.stack }}</p>
-{% empty %}
-    <p>Проекты пока не добавлены.</p>
-{% endfor %}
+<section class="container py-5">
+    <div class="row align-items-center">
 
-<h2>Сертификаты</h2>
+        <div class="col-lg-6">
+            <h1 class="display-4 fw-bold">
+                {{ settings.full_name }}
+            </h1>
 
-{% for certificate in certificates %}
-    <h3>{{ certificate.title }}</h3>
-{% empty %}
-    <p>Сертификаты пока не добавлены.</p>
-{% endfor %}
+            <p class="lead">
+                {{ settings.position }}
+            </p>
+
+            <p>
+                {{ settings.about }}
+            </p>
+
+            <a href="{{ settings.github_url }}" class="btn btn-dark">
+                GitHub
+            </a>
+
+            <a href="{{ settings.telegram_url }}" class="btn btn-primary">
+                Telegram
+            </a>
+        </div>
+
+        <div class="col-lg-6 text-center">
+            {% if settings.photo %}
+                <img src="{{ settings.photo.url }}"
+                     class="img-fluid rounded-circle"
+                     style="max-width: 350px;"
+                     alt="{{ settings.full_name }}">
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+<section id="projects" class="container py-5">
+    <h2 class="mb-4">Проекты</h2>
+
+    <div class="row g-4">
+        {% for project in projects %}
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h3 class="card-title h5">{{ project.title }}</h3>
+                        <p class="card-text">{{ project.short_description }}</p>
+                        <p class="text-muted">{{ project.stack }}</p>
+
+                        {% if project.github_url %}
+                            <a href="{{ project.github_url }}" class="btn btn-dark btn-sm">
+                                GitHub
+                            </a>
+                        {% endif %}
+
+                        {% if project.demo_url %}
+                            <a href="{{ project.demo_url }}" class="btn btn-outline-primary btn-sm">
+                                Demo
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Проекты пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section id="certificates" class="container py-5">
+    <h2 class="mb-4">Сертификаты</h2>
+
+    <div class="row g-4">
+        {% for certificate in certificates %}
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title h5">{{ certificate.title }}</h3>
+
+                        {% if certificate.organization %}
+                            <p class="text-muted">{{ certificate.organization }}</p>
+                        {% endif %}
+
+                        <a href="{{ certificate.file.url }}" class="btn btn-outline-dark btn-sm">
+                            Посмотреть
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Сертификаты пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
