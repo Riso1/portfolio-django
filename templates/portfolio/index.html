@@ -14,9 +14,20 @@
                 {{ settings.position }}
             </p>
 
-            <p>
-                {{ settings.about }}
-            </p>
+            <div class="hero-stats">
+                {% for stat in hero_stats %}
+                    <div class="hero-stat">
+                        <strong>{{ stat.value }}</strong>
+                        <span>{{ stat.label }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {% if text_blocks.hero_description %}
+                <div class="mb-4">
+                    {{ text_blocks.hero_description.content|linebreaks }}
+                </div>
+            {% endif %}
 
             <a href="{{ settings.github_url }}" class="btn btn-dark">
                 GitHub
@@ -39,41 +50,120 @@
     </div>
 </section>
 
+{% if sections.about and text_blocks.about_me %}
+<section id="about" class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <h2 class="mb-4">{{ sections.about.title }}</h2>
+
+            {% if sections.about.subtitle %}
+                <p class="mb-4">{{ sections.about.subtitle }}</p>
+            {% endif %}
+
+            <div class="about-card">
+                {{ text_blocks.about_me.content|linebreaks }}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if sections.technologies %}
+<section id="technologies" class="container py-5">
+    <h2 class="mb-4">{{ sections.technologies.title }}</h2>
+
+    {% if sections.technologies.subtitle %}
+        <p class="mb-4">{{ sections.technologies.subtitle }}</p>
+    {% endif %}
+
+    <div class="row g-3">
+        {% for technology in technologies %}
+            <div class="col-6 col-md-3">
+                <div class="tech-card">
+                    {% if technology.icon_class %}
+                        <i class="{{ technology.icon_class }}"></i>
+                    {% endif %}
+                    <span>{{ technology.title }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endif %}
+
+{% if sections.projects %}
 <section id="projects" class="container py-5">
-    <h2 class="mb-4">Проекты</h2>
+    <h2 class="mb-4">{{ sections.projects.title }}</h2>
+
+    {% if sections.projects.subtitle %}
+        <p class="mb-4">{{ sections.projects.subtitle }}</p>
+    {% endif %}
 
     <div class="row g-4">
         {% for project in projects %}
             <div class="col-md-6">
-                <div class="card h-100 shadow-sm">
+                <article class="project-card h-100">
                     {% if project.image %}
-                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                        <img src="{{ project.image.url }}"
+                             class="project-card__image"
+                             alt="{{ project.title }}">
                     {% endif %}
 
-                    <div class="card-body">
-                        <h3 class="card-title h5">{{ project.title }}</h3>
-                        <p class="card-text">{{ project.short_description }}</p>
-                        <p class="text-muted">{{ project.stack }}</p>
+                    <div class="project-card__body">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <h3 class="project-card__title">
+                                {{ project.title }}
+                            </h3>
 
-                        {% if project.github_url %}
-                            <a href="{{ project.github_url }}" class="btn btn-dark btn-sm">
-                                GitHub
-                            </a>
+                            {% if project.featured %}
+                                <span class="project-card__badge">
+                                    Избранный
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <p class="project-card__text">
+                            {{ project.short_description }}
+                        </p>
+
+                        {% if project.full_description %}
+                            <p class="project-card__text small">
+                                {{ project.full_description }}
+                            </p>
                         {% endif %}
 
-                        {% if project.demo_url %}
-                            <a href="{{ project.demo_url }}" class="btn btn-outline-primary btn-sm">
-                                Demo
-                            </a>
-                        {% endif %}
+                        <div class="project-card__meta">
+                            <span>{{ project.project_status }}</span>
+                            <span>{{ project.stack }}</span>
+                        </div>
+
+                        <div class="project-card__actions">
+                            {% if project.github_url %}
+                                <a href="{{ project.github_url }}"
+                                   class="btn btn-dark btn-sm"
+                                   target="_blank">
+                                    GitHub
+                                </a>
+                            {% endif %}
+
+                            {% if project.demo_url %}
+                                <a href="{{ project.demo_url }}"
+                                   class="btn btn-outline-light btn-sm"
+                                   target="_blank">
+                                    Demo
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
+                </article>
             </div>
         {% empty %}
             <p>Проекты пока не добавлены.</p>
         {% endfor %}
     </div>
 </section>
+{% endif %}
 
 <section id="certificates" class="container py-5">
     <h2 class="mb-4">Сертификаты</h2>
@@ -100,5 +190,33 @@
         {% endfor %}
     </div>
 </section>
+
+{% if sections.contacts %}
+<section id="contacts" class="container py-5">
+    <h2 class="mb-4">{{ sections.contacts.title }}</h2>
+
+    {% if sections.contacts.subtitle %}
+        <p class="mb-4">{{ sections.contacts.subtitle }}</p>
+    {% endif %}
+
+    <div class="row g-3">
+        {% for contact in contact_links %}
+            <div class="col-md-4">
+                <a href="{{ contact.url }}"
+                   class="contact-card text-decoration-none"
+                   target="_blank">
+                    {% if contact.icon_class %}
+                        <i class="{{ contact.icon_class }}"></i>
+                    {% endif %}
+
+                    <span>{{ contact.title }}</span>
+                </a>
+            </div>
+        {% empty %}
+            <p>Контакты пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
 
 {% endblock %}

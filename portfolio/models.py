@@ -10,9 +10,6 @@ class SiteSettings(models.Model):
         max_length=150,
         verbose_name='Должность'
     )
-    about = models.TextField(
-        verbose_name='О себе'
-    )
     photo = models.ImageField(
         upload_to='profile/',
         blank=True,
@@ -46,47 +43,212 @@ class SiteSettings(models.Model):
         return 'Настройки сайта'
 
 
+class PageSection(models.Model):
+    key = models.SlugField(
+        max_length=100,
+        unique=True,
+        verbose_name='Ключ секции'
+    )
+    title = models.CharField(
+        max_length=150,
+        verbose_name='Заголовок'
+    )
+    subtitle = models.TextField(
+        blank=True,
+        verbose_name='Подзаголовок / описание'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Секция страницы'
+        verbose_name_plural = 'Секции страницы'
+
+    def __str__(self):
+        return self.title
+
+
+class TextBlock(models.Model):
+    key = models.SlugField(
+        max_length=100,
+        unique=True,
+        verbose_name='Ключ блока'
+    )
+    title = models.CharField(
+        max_length=150,
+        verbose_name='Заголовок'
+    )
+    content = models.TextField(
+        verbose_name='Текст'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Текстовый блок'
+        verbose_name_plural = 'Текстовые блоки'
+
+    def __str__(self):
+        return self.title
+
+
+class Technology(models.Model):
+    title = models.CharField(
+        max_length=100,
+        verbose_name='Название технологии'
+    )
+    icon_class = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='CSS-класс иконки'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Технология'
+        verbose_name_plural = 'Технологии'
+
+    def __str__(self):
+        return self.title
+
+
+class HeroStat(models.Model):
+    value = models.CharField(
+        max_length=50,
+        verbose_name='Значение'
+    )
+    label = models.CharField(
+        max_length=150,
+        verbose_name='Подпись'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Показатель на главном экране'
+        verbose_name_plural = 'Показатели на главном экране'
+
+    def __str__(self):
+        return f'{self.value} — {self.label}'
+
+
+class ContactLink(models.Model):
+    title = models.CharField(
+        max_length=100,
+        verbose_name='Название'
+    )
+    url = models.CharField(
+        max_length=255,
+        verbose_name='Ссылка или контакт'
+    )
+    icon_class = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='CSS-класс иконки'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Контакт / ссылка'
+        verbose_name_plural = 'Контакты и ссылки'
+
+    def __str__(self):
+        return self.title
+
+
 class Project(models.Model):
     title = models.CharField(
         max_length=150,
         verbose_name='Название проекта'
     )
+
     short_description = models.TextField(
         verbose_name='Краткое описание'
     )
+
     stack = models.CharField(
         max_length=255,
         verbose_name='Стек технологий'
     )
+
     image = models.ImageField(
         upload_to='projects/',
         blank=True,
         null=True,
         verbose_name='Обложка проекта'
     )
+
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано'
     )
+
     order = models.PositiveIntegerField(
         default=0,
         verbose_name='Порядок отображения'
     )
+
     full_description = models.TextField(
         blank=True,
         verbose_name='Полное описание'
     )
+
     github_url = models.URLField(
         blank=True,
         verbose_name='Ссылка на GitHub'
     )
+
     demo_url = models.URLField(
         blank=True,
         verbose_name='Ссылка на демо'
     )
+
     featured = models.BooleanField(
         default=False,
         verbose_name='Показывать на главной'
+    )
+
+    project_status = models.CharField(
+        max_length=50,
+        default='Завершён',
+        verbose_name='Статус проекта'
     )
 
 

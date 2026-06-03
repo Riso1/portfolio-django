@@ -1,5 +1,48 @@
 from django.contrib import admin
-from .models import SiteSettings, Project, Certificate
+from .models import (
+    SiteSettings,
+    PageSection,
+    TextBlock,
+    Technology,
+    HeroStat,
+    ContactLink,
+    Project,
+    Certificate,
+)
+
+
+@admin.register(TextBlock)
+class TextBlockAdmin(admin.ModelAdmin):
+    list_display = ('title', 'key', 'is_published', 'order')
+    list_editable = ('is_published', 'order')
+    search_fields = ('title', 'key', 'content')
+
+
+@admin.register(PageSection)
+class PageSectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'key', 'is_published', 'order')
+    list_editable = ('is_published', 'order')
+    search_fields = ('title', 'key')
+
+
+@admin.register(Technology)
+class TechnologyAdmin(admin.ModelAdmin):
+    list_display = ('title', 'icon_class', 'is_published', 'order')
+    list_editable = ('is_published', 'order')
+    search_fields = ('title',)
+
+
+@admin.register(HeroStat)
+class HeroStatAdmin(admin.ModelAdmin):
+    list_display = ('value', 'label', 'is_published', 'order')
+    list_editable = ('is_published', 'order')
+
+
+@admin.register(ContactLink)
+class ContactLinkAdmin(admin.ModelAdmin):
+    list_display = ('title', 'url', 'is_published', 'order')
+    list_editable = ('is_published', 'order')
+    search_fields = ('title', 'url')
 
 
 @admin.register(SiteSettings)
@@ -12,9 +55,21 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('title', 'stack', 'is_published', 'order')
-    list_editable = ('is_published', 'order')
-    search_fields = ('title', 'stack')
+    list_display = (
+        'title',
+        'stack',
+        'project_status',
+        'featured',
+        'is_published',
+        'order',
+    )
+    list_editable = (
+        'project_status',
+        'featured',
+        'is_published',
+        'order',
+    )
+    search_fields = ('title', 'stack', 'short_description')
 
 
 @admin.register(Certificate)
