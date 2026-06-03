@@ -31,6 +31,13 @@ class SiteSettings(models.Model):
         verbose_name='Favicon'
     )
 
+    og_image = models.ImageField(
+        upload_to='og/',
+        blank=True,
+        null=True,
+        verbose_name='Картинка для превью ссылки'
+    )
+
     photo = models.ImageField(
         upload_to='profile/',
         blank=True,
