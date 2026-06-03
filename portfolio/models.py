@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 
 class SiteSettings(models.Model):
@@ -73,21 +74,30 @@ class PageSection(models.Model):
         unique=True,
         verbose_name='Ключ секции'
     )
+
     title = models.CharField(
         max_length=150,
         verbose_name='Заголовок'
     )
+
     subtitle = models.TextField(
         blank=True,
         verbose_name='Подзаголовок / описание'
     )
+
     is_published = models.BooleanField(
         default=True,
         verbose_name='Показывать'
     )
+
     order = models.PositiveIntegerField(
         default=0,
         verbose_name='Порядок'
+    )
+
+    show_in_menu = models.BooleanField(
+        default=True,
+        verbose_name='Показывать в меню'
     )
 
     class Meta:
@@ -320,6 +330,19 @@ class Project(models.Model):
         default='Завершён',
         verbose_name='Статус проекта'
     )
+
+    slug = models.SlugField(
+        max_length=150,
+        unique=True,
+        blank=True,
+        null=True,
+        verbose_name='URL-адрес проекта'
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
     class Meta:

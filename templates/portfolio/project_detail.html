@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <a href="{% url 'home' %}#projects" class="btn btn-outline-light btn-sm mb-4">
+        ← Назад
+    </a>
+
+    <article class="project-detail">
+        {% if project.image %}
+            <img src="{{ project.image.url }}"
+                 class="project-detail__image"
+                 alt="{{ project.title }}">
+        {% endif %}
+
+        <div class="project-detail__body">
+            <span class="project-card__badge">
+                {{ project.project_status }}
+            </span>
+
+            <h1 class="mt-3 mb-3">
+                {{ project.title }}
+            </h1>
+
+            <p class="lead">
+                {{ project.short_description }}
+            </p>
+
+            {% if project.full_description %}
+                <div class="project-detail__description">
+                    {{ project.full_description|linebreaks }}
+                </div>
+            {% endif %}
+
+            <div class="project-card__meta">
+                <span>{{ project.stack }}</span>
+            </div>
+
+            <div class="project-card__actions">
+                {% if project.github_url %}
+                    <a href="{{ project.github_url }}"
+                       class="btn btn-dark"
+                       target="_blank">
+                        GitHub
+                    </a>
+                {% endif %}
+
+                {% if project.demo_url %}
+                    <a href="{{ project.demo_url }}"
+                       class="btn btn-outline-light"
+                       target="_blank">
+                        Demo
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </article>
+</section>
+
+{% endblock %}

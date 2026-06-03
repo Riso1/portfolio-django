@@ -38,8 +38,18 @@ class TimelineItemAdmin(admin.ModelAdmin):
 
 @admin.register(PageSection)
 class PageSectionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'key', 'is_published', 'order')
-    list_editable = ('is_published', 'order')
+    list_display = (
+        'title',
+        'key',
+        'is_published',
+        'show_in_menu',
+        'order',
+    )
+    list_editable = (
+        'is_published',
+        'show_in_menu',
+        'order',
+    )
     search_fields = ('title', 'key')
 
 
@@ -87,6 +97,9 @@ class ProjectAdmin(admin.ModelAdmin):
         'is_published',
         'order',
     )
+    prepopulated_fields = {
+        'slug': ('title',)
+    }
     search_fields = ('title', 'stack', 'short_description')
 
 

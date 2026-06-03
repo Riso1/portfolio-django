@@ -47,12 +47,11 @@
 
         <div class="collapse navbar-collapse" id="mainNavbar">
             <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-                <a href="#about" class="nav-link">Обо мне</a>
-                <a href="#timeline" class="nav-link">Опыт</a>
-                <a href="#technologies" class="nav-link">Технологии</a>
-                <a href="#projects" class="nav-link">Проекты</a>
-                <a href="#certificates" class="nav-link">Сертификаты</a>
-                <a href="#contacts" class="nav-link">Контакты</a>
+                {% for section in menu_sections %}
+                    <a href="#{{ section.key }}" class="nav-link">
+                        {{ section.title }}
+                    </a>
+                {% endfor %}
 
                 {% if settings.resume %}
                     <a href="{{ settings.resume.url }}"

@@ -212,6 +212,13 @@
                                     Demo
                                 </a>
                             {% endif %}
+
+                            {% if project.slug %}
+                                <a href="{% url 'project_detail' project.slug %}"
+                                   class="btn btn-outline-light btn-sm">
+                                    Подробнее
+                                </a>
+                            {% endif %}
                         </div>
                     </div>
                 </article>

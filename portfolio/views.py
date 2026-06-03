@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import (
     SiteSettings,
     PageSection,
@@ -19,6 +19,11 @@ def home(request):
         section.key: section
         for section in PageSection.objects.filter(is_published=True)
     }
+
+    menu_sections = PageSection.objects.filter(
+        is_published=True,
+        show_in_menu=True,
+    )
 
     text_blocks = {
         block.key: block
@@ -52,6 +57,21 @@ def home(request):
         'certificates': certificates,
         'experience_items': experience_items,
         'education_items': education_items,
+        'menu_sections': menu_sections,
     }
 
     return render(request, 'portfolio/index.html', context)
+
+def project_detail(request, slug):
+    project = get_object_or_404(
+        Project,
+        slug=slug,
+        is_published=True,
+    )
+
+    context = {
+        'project': project,
+        'settings': SiteSettings.objects.first(),
+    }
+
+    return render(request, 'portfolio/project_detail.html', context)
