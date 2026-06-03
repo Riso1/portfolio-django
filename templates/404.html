@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5 text-center">
+    <div class="error-page">
+        <h1 class="display-1 fw-bold">404</h1>
+
+        <h2 class="mb-3">
+            Страница не найдена
+        </h2>
+
+        <p class="mb-4">
+            Возможно, ссылка устарела или адрес был введён с ошибкой.
+        </p>
+
+        <a href="{% url 'home' %}" class="btn btn-dark">
+            Вернуться на главную
+        </a>
+    </div>
+</section>
+
+{% endblock %}
