@@ -175,7 +175,10 @@ section {
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 90px;
+}
+
+section[id] {
+    scroll-margin-top: 110px;
 }
 
 @media (max-width: 991px) {
@@ -269,4 +272,57 @@ html {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+.site-footer {
+    border-top: 1px solid #1f2937;
+    background-color: #0b1120;
+    padding: 28px 0;
+}
+
+.site-footer__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.site-footer p {
+    margin: 0;
+    color: #94a3b8;
+}
+
+.site-footer__links {
+    display: flex;
+    gap: 14px;
+}
+
+.site-footer__links a {
+    color: #cbd5e1;
+    font-size: 22px;
+    transition: 0.3s;
+}
+
+.site-footer__links a:hover {
+    color: #3b82f6;
+}
+
+@media (max-width: 991px) {
+    .navbar {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .navbar-brand {
+        max-width: 220px;
+        white-space: normal;
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 991px) {
+    section[id] {
+        scroll-margin-top: 110px;
+    }
 }
