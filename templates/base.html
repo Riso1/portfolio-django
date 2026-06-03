@@ -5,7 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ settings.full_name }}</title>
+
+    <title>
+        {% if settings.site_title %}
+            {{ settings.site_title }}
+        {% else %}
+            {{ settings.full_name }}
+        {% endif %}
+    </title>
+
+    {% if settings.meta_description %}
+        <meta name="description" content="{{ settings.meta_description }}">
+    {% endif %}
+
+    {% if settings.favicon %}
+        <link rel="icon" href="{{ settings.favicon.url }}">
+    {% endif %}
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"

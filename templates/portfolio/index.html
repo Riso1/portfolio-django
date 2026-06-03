@@ -223,31 +223,51 @@
 </section>
 {% endif %}
 
+{% if sections.certificates %}
 <section id="certificates" class="container py-5">
-    <h2 class="mb-4">Сертификаты</h2>
+    <h2 class="mb-4">{{ sections.certificates.title }}</h2>
+
+    {% if sections.certificates.subtitle %}
+        <p class="mb-4">{{ sections.certificates.subtitle }}</p>
+    {% endif %}
 
     <div class="row g-4">
         {% for certificate in certificates %}
-            <div class="col-md-4">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h3 class="card-title h5">{{ certificate.title }}</h3>
+            <div class="col-md-6 col-lg-4">
+                <article class="certificate-card h-100">
+                    <div class="certificate-card__icon">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+
+                    <div class="certificate-card__body">
+                        <h3>{{ certificate.title }}</h3>
 
                         {% if certificate.organization %}
-                            <p class="text-muted">{{ certificate.organization }}</p>
+                            <p class="certificate-card__organization">
+                                {{ certificate.organization }}
+                            </p>
                         {% endif %}
 
-                        <a href="{{ certificate.file.url }}" class="btn btn-outline-dark btn-sm">
+                        {% if certificate.issue_date %}
+                            <p class="certificate-card__date">
+                                {{ certificate.issue_date }}
+                            </p>
+                        {% endif %}
+
+                        <a href="{{ certificate.file.url }}"
+                           class="btn btn-outline-light btn-sm"
+                           target="_blank">
                             Посмотреть
                         </a>
                     </div>
-                </div>
+                </article>
             </div>
         {% empty %}
             <p>Сертификаты пока не добавлены.</p>
         {% endfor %}
     </div>
 </section>
+{% endif %}
 
 {% if sections.contacts %}
 <section id="contacts" class="container py-5">

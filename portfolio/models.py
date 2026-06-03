@@ -6,30 +6,54 @@ class SiteSettings(models.Model):
         max_length=150,
         verbose_name='ФИО'
     )
+
     position = models.CharField(
         max_length=150,
         verbose_name='Должность'
     )
+
+    site_title = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name='Название сайта во вкладке'
+    )
+
+    meta_description = models.TextField(
+        blank=True,
+        verbose_name='SEO-описание'
+    )
+
+    favicon = models.ImageField(
+        upload_to='favicon/',
+        blank=True,
+        null=True,
+        verbose_name='Favicon'
+    )
+
     photo = models.ImageField(
         upload_to='profile/',
         blank=True,
         null=True,
         verbose_name='Фото'
     )
+
     resume = models.FileField(
         upload_to='resume/',
         blank=True,
         null=True,
         verbose_name='Резюме'
     )
+
     github_url = models.URLField(
         blank=True,
         verbose_name='GitHub'
     )
+
     telegram_url = models.URLField(
         blank=True,
         verbose_name='Telegram'
     )
+
     email = models.EmailField(
         blank=True,
         verbose_name='Email'
