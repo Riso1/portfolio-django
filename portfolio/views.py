@@ -10,6 +10,8 @@ from .models import (
     Project,
     Certificate,
 )
+from django.http import HttpResponse
+from django.urls import reverse
 
 
 def home(request):
@@ -75,3 +77,38 @@ def project_detail(request, slug):
     }
 
     return render(request, 'portfolio/project_detail.html', context)
+
+def robots_txt(request):
+    content = """User-agent: *
+Allow: /
+
+Sitemap: http://127.0.0.1:8000/sitemap.xml
+"""
+    return HttpResponse(content, content_type='text/plain')
+
+
+def sitemap_xml(request):
+    projects = Project.objects.filter(is_published=True, slug__isnull=False)
+
+    urls = [
+        request.build_absolute_uri(reverse('home')),
+    ]
+
+    for project in projects:
+        urls.append(
+            request.build_absolute_uri(
+                reverse('project_detail', kwargs={'slug': project.slug})
+            )
+        )
+
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+
+    for url in urls:
+        xml.append('    <url>')
+        xml.append(f'        <loc>{url}</loc>')
+        xml.append('    </url>')
+
+    xml.append('</urlset>')
+
+    return HttpResponse('\n'.join(xml), content_type='application/xml')
