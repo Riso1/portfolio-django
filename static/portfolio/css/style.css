@@ -326,3 +326,31 @@ section[id] {
         scroll-margin-top: 110px;
     }
 }
+
+.timeline-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 18px;
+}
+
+.timeline-card__period {
+    display: inline-block;
+    color: #3b82f6;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.timeline-card h4 {
+    margin-bottom: 8px;
+}
+
+.timeline-card__subtitle {
+    color: #bfdbfe;
+    margin-bottom: 10px;
+}
+
+.timeline-card__description p:last-child {
+    margin-bottom: 0;
+}

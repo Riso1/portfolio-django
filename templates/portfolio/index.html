@@ -68,6 +68,64 @@
 </section>
 {% endif %}
 
+{% if sections.timeline %}
+<section id="timeline" class="container py-5">
+    <h2 class="mb-4">{{ sections.timeline.title }}</h2>
+
+    {% if sections.timeline.subtitle %}
+        <p class="mb-4">{{ sections.timeline.subtitle }}</p>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <h3 class="h4 mb-4">Опыт</h3>
+
+            {% for item in experience_items %}
+                <div class="timeline-card">
+                    <span class="timeline-card__period">{{ item.period }}</span>
+                    <h4>{{ item.title }}</h4>
+
+                    {% if item.subtitle %}
+                        <p class="timeline-card__subtitle">{{ item.subtitle }}</p>
+                    {% endif %}
+
+                    {% if item.description %}
+                        <div class="timeline-card__description">
+                            {{ item.description|linebreaks }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>Опыт пока не добавлен.</p>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-6">
+            <h3 class="h4 mb-4">Образование</h3>
+
+            {% for item in education_items %}
+                <div class="timeline-card">
+                    <span class="timeline-card__period">{{ item.period }}</span>
+                    <h4>{{ item.title }}</h4>
+
+                    {% if item.subtitle %}
+                        <p class="timeline-card__subtitle">{{ item.subtitle }}</p>
+                    {% endif %}
+
+                    {% if item.description %}
+                        <div class="timeline-card__description">
+                            {{ item.description|linebreaks }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <p>Образование пока не добавлено.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
 {% if sections.technologies %}
 <section id="technologies" class="container py-5">
     <h2 class="mb-4">{{ sections.technologies.title }}</h2>

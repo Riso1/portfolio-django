@@ -106,6 +106,52 @@ class TextBlock(models.Model):
         return self.title
 
 
+class TimelineItem(models.Model):
+    CATEGORY_CHOICES = [
+        ('experience', 'Опыт'),
+        ('education', 'Образование'),
+    ]
+
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        verbose_name='Категория'
+    )
+    period = models.CharField(
+        max_length=100,
+        verbose_name='Период'
+    )
+    title = models.CharField(
+        max_length=150,
+        verbose_name='Название'
+    )
+    subtitle = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name='Подзаголовок'
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name='Описание'
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name='Показывать'
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок'
+    )
+
+    class Meta:
+        ordering = ['order', 'id']
+        verbose_name = 'Опыт / образование'
+        verbose_name_plural = 'Опыт и образование'
+
+    def __str__(self):
+        return f'{self.get_category_display()} — {self.title}'
+
+
 class Technology(models.Model):
     title = models.CharField(
         max_length=100,

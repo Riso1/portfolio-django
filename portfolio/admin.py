@@ -3,6 +3,7 @@ from .models import (
     SiteSettings,
     PageSection,
     TextBlock,
+    TimelineItem,
     Technology,
     HeroStat,
     ContactLink,
@@ -16,6 +17,23 @@ class TextBlockAdmin(admin.ModelAdmin):
     list_display = ('title', 'key', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'key', 'content')
+
+
+@admin.register(TimelineItem)
+class TimelineItemAdmin(admin.ModelAdmin):
+    list_display = (
+        'title',
+        'category',
+        'period',
+        'is_published',
+        'order',
+    )
+    list_editable = (
+        'is_published',
+        'order',
+    )
+    list_filter = ('category', 'is_published')
+    search_fields = ('title', 'subtitle', 'description')
 
 
 @admin.register(PageSection)

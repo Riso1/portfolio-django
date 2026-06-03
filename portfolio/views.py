@@ -3,6 +3,7 @@ from .models import (
     SiteSettings,
     PageSection,
     TextBlock,
+    TimelineItem,
     Technology,
     HeroStat,
     ContactLink,
@@ -30,6 +31,16 @@ def home(request):
     projects = Project.objects.filter(is_published=True)
     certificates = Certificate.objects.filter(is_published=True)
 
+    experience_items = TimelineItem.objects.filter(
+        category='experience',
+        is_published=True
+    )
+
+    education_items = TimelineItem.objects.filter(
+        category='education',
+        is_published=True
+    )
+
     context = {
         'settings': site_settings,
         'sections': sections,
@@ -39,6 +50,8 @@ def home(request):
         'contact_links': contact_links,
         'projects': projects,
         'certificates': certificates,
+        'experience_items': experience_items,
+        'education_items': education_items,
     }
 
     return render(request, 'portfolio/index.html', context)
