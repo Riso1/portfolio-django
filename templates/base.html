@@ -47,8 +47,9 @@
 
 <header class="site-header sticky-top">
     <nav class="container-fluid container-lg navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand fw-bold" href="/">
-            {{ settings.full_name }}
+        <a class="navbar-brand site-logo" href="{% url 'home' %}">
+            <span class="site-logo__icon">&lt;/&gt;</span>
+            <span class="site-logo__text">m0r64n4</span>
         </a>
 
         <button class="navbar-toggler"

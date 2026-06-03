@@ -425,3 +425,20 @@ section[id] {
 .error-page h1 {
     color: #3b82f6;
 }
+
+.site-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.site-logo__icon {
+    color: #3b82f6;
+    font-weight: 900;
+}
+
+.site-logo__text {
+    color: #f8fafc;
+}
