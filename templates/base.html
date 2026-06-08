@@ -87,7 +87,8 @@
 
                 {% if settings.resume %}
                     <a href="{{ settings.resume.url }}"
-                       class="btn btn-outline-light btn-sm ms-lg-2 mt-2 mt-lg-0">
+                       class="btn btn-outline-light btn-sm ms-lg-2 mt-2 mt-lg-0"
+                       onclick="ym(109723465,'reachGoal','resume_download')">
                         Скачать резюме
                     </a>
                 {% endif %}
@@ -169,6 +170,28 @@
                 scrollToTarget();
             }
         });
+    });
+</script>
+
+<script>
+    document.addEventListener('click', function (event) {
+        const link = event.target.closest('a');
+
+        if (!link || typeof ym !== 'function') {
+            return;
+        }
+
+        const href = link.getAttribute('href') || '';
+
+        if (href.includes('github.com')) {
+            ym(109723465, 'reachGoal', 'github_click');
+        } else if (href.includes('t.me') || href.includes('telegram')) {
+            ym(109723465, 'reachGoal', 'telegram_click');
+        } else if (href.startsWith('mailto:')) {
+            ym(109723465, 'reachGoal', 'email_click');
+        } else if (href.includes('/media/') && href.toLowerCase().includes('resume')) {
+            ym(109723465, 'reachGoal', 'resume_download');
+        }
     });
 </script>
 
