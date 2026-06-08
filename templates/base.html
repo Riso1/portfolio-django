@@ -87,6 +87,7 @@
 
                 {% if settings.resume %}
                     <a href="{{ settings.resume.url }}"
+                       data-goal="resume_download"
                        class="btn btn-outline-light btn-sm ms-lg-2 mt-2 mt-lg-0">
                         Скачать резюме
                     </a>
@@ -188,7 +189,7 @@
             ym(109723465, 'reachGoal', 'telegram_click');
         } else if (href.startsWith('mailto:')) {
             ym(109723465, 'reachGoal', 'email_click');
-        } else if (href.includes('/media/') && href.toLowerCase().includes('resume')) {
+        } else if (link.dataset.goal === 'resume_download') {
             ym(109723465, 'reachGoal', 'resume_download');
         }
     });
