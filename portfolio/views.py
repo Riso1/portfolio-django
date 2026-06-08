@@ -82,7 +82,7 @@ def robots_txt(request):
     content = """User-agent: *
 Allow: /
 
-Sitemap: http://127.0.0.1:8000/sitemap.xml
+Sitemap: https://m0r64n4.ru/sitemap.xml
 """
     return HttpResponse(content, content_type='text/plain')
 
