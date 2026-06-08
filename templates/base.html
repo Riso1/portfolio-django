@@ -22,13 +22,7 @@
             <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ settings.og_image.url }}">
         {% endif %}
 
-    <title>
-        {% if settings.site_title %}
-            {{ settings.site_title }}
-        {% else %}
-            {{ settings.full_name }}
-        {% endif %}
-    </title>
+    <title>{% if settings.site_title %}{{ settings.site_title }}{% else %}{{ settings.full_name }}{% endif %}</title>
 
     {% if settings.meta_description %}
         <meta name="description" content="{{ settings.meta_description }}">
