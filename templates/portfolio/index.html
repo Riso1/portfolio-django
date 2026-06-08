@@ -257,7 +257,7 @@
 
                         {% if certificate.issue_date %}
                             <p class="certificate-card__date">
-                                {{ certificate.issue_date }}
+                                {{ certificate.issue_date|date:"j E Y" }}
                             </p>
                         {% endif %}
 
