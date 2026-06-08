@@ -88,12 +88,14 @@ class ProjectAdmin(admin.ModelAdmin):
         'stack',
         'project_status',
         'featured',
+        'show_on_home',
         'is_published',
         'order',
     )
     list_editable = (
         'project_status',
         'featured',
+        'show_on_home',
         'is_published',
         'order',
     )
