@@ -246,6 +246,11 @@ def project_order(request):
 def project_order_success(request):
     context = {
         'settings': SiteSettings.objects.first(),
+        'menu_sections': PageSection.objects.filter(show_in_menu=True, is_published=True).order_by('order'),
+        'text_blocks': {
+            block.key: block for block in TextBlock.objects.all()
+        },
+        'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
     }
 
     return render(request, 'portfolio/project_order_success.html', context)
