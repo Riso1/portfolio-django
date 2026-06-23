@@ -9,6 +9,8 @@ from .views import (
     project_order,
     project_order_success,
     legal_document,
+    payment_page,
+    payment_success,
 )
 
 urlpatterns = [
@@ -21,4 +23,6 @@ urlpatterns = [
     path('order/', project_order, name='project_order'),
     path('order/success/', project_order_success, name='project_order_success'),
     path('legal/<slug:slug>/', legal_document, name='legal_document'),
+    path('payment/', payment_page, name='payment_page'),
+    path('payment/success/', payment_success, name='payment_success'),
 ]

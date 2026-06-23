@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="payment-page">
+        <div class="payment-page__hero">
+            <span>Оплата проекта</span>
+            <h1>Оплата после согласования</h1>
+            <p>
+                Переходите к оплате только после того, как мы согласовали задачу,
+                стоимость, сроки и объём работ.
+            </p>
+        </div>
+
+        <div class="payment-page__grid">
+            <div class="payment-card">
+                <h2>Реквизиты</h2>
+
+                {% if payment_settings %}
+                    {% if payment_settings.qr_code %}
+                        <img class="payment-card__qr"
+                             src="{{ payment_settings.qr_code.url }}"
+                             alt="QR-код для оплаты">
+                    {% endif %}
+
+                    <p><strong>Банк:</strong> {{ payment_settings.bank_name }}</p>
+
+                    {% if payment_settings.recipient_name %}
+                        <p><strong>Получатель:</strong> {{ payment_settings.recipient_name }}</p>
+                    {% endif %}
+
+                    {% if payment_settings.phone_or_payment_info %}
+                        <p><strong>Реквизиты:</strong> {{ payment_settings.phone_or_payment_info }}</p>
+                    {% endif %}
+
+                    {% if payment_settings.description %}
+                        <p>{{ payment_settings.description }}</p>
+                    {% endif %}
+                {% else %}
+                    <p>Реквизиты пока не добавлены.</p>
+                {% endif %}
+            </div>
+
+            <form method="post" class="payment-form">
+                {% csrf_token %}
+
+                <h2>Я оплатил</h2>
+
+                <input name="name" type="text" placeholder="Ваше имя" required>
+                <input name="contact" type="text" placeholder="Telegram, email или телефон" required>
+                <input name="amount" type="number" min="1" placeholder="Сумма оплаты" required>
+                <textarea name="comment" rows="5" placeholder="Комментарий: номер заявки, проект или последние 4 цифры карты"></textarea>
+
+                <button type="submit">
+                    Отправить подтверждение
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

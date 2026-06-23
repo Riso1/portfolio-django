@@ -23,6 +23,7 @@ from .models import (
     OrderImprovementGroup,
     OrderPaymentSettings,
     LegalDocument,
+    PaymentConfirmation,
 )
 
 
@@ -233,4 +234,10 @@ class LegalDocumentAdmin(admin.ModelAdmin):
     list_editable = ('is_published',)
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title', 'content')
-    
+
+
+@admin.register(PaymentConfirmation)
+class PaymentConfirmationAdmin(admin.ModelAdmin):
+    list_display = ('name', 'contact', 'amount', 'created_at')
+    search_fields = ('name', 'contact', 'comment')
+    readonly_fields = ('created_at',)

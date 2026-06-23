@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="order-success">
+        <h1>Подтверждение отправлено</h1>
+        <p>Я получил данные об оплате и проверю поступление.</p>
+
+        <a href="{% url 'home' %}" class="btn btn-primary">
+            На главную
+        </a>
+    </div>
+</section>
+
+{% endblock %}

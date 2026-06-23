@@ -17,6 +17,7 @@ from .models import (
     OrderPaymentSettings,
     LegalDocument,
     ProjectOrder,
+    PaymentConfirmation,
 )
 from django.http import HttpResponse
 from django.urls import reverse
@@ -260,6 +261,76 @@ def project_order_success(request):
     }
 
     return render(request, 'portfolio/project_order_success.html', context)
+
+
+def payment_page(request):
+    payment_settings = OrderPaymentSettings.objects.first()
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        contact = request.POST.get('contact', '').strip()
+
+        try:
+            amount = int(request.POST.get('amount', 0) or 0)
+        except ValueError:
+            amount = 0
+
+        comment = request.POST.get('comment', '').strip()
+
+        confirmation = PaymentConfirmation.objects.create(
+            name=name,
+            contact=contact,
+            amount=amount,
+            comment=comment,
+        )
+
+        subject = f'Подтверждение оплаты: {confirmation.amount} ₽'
+        message = (
+            f'Имя: {confirmation.name}\n'
+            f'Контакт: {confirmation.contact}\n'
+            f'Сумма: {confirmation.amount} ₽\n\n'
+            f'Комментарий:\n{confirmation.comment}'
+        )
+
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.ORDER_EMAIL_TO],
+                fail_silently=False,
+            )
+        except Exception as error:
+            print(f'Ошибка отправки письма оплаты: {error}')
+
+        return redirect('payment_success')
+
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'payment_settings': payment_settings,
+        'menu_sections': PageSection.objects.filter(show_in_menu=True, is_published=True).order_by('order'),
+        'text_blocks': {
+            block.key: block for block in TextBlock.objects.all()
+        },
+        'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
+    }
+
+    return render(request, 'portfolio/payment.html', context)
+
+
+def payment_success(request):
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'menu_sections': PageSection.objects.filter(show_in_menu=True, is_published=True).order_by('order'),
+        'text_blocks': {
+            block.key: block for block in TextBlock.objects.all()
+        },
+        'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
+    }
+
+    return render(request, 'portfolio/payment_success.html', context)
 
 
 def legal_document(request, slug):

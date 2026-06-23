@@ -670,6 +670,22 @@ class OrderPaymentSettings(models.Model):
         return self.title
 
 
+class PaymentConfirmation(models.Model):
+    name = models.CharField(max_length=120, verbose_name='Имя')
+    contact = models.CharField(max_length=160, verbose_name='Контакт')
+    amount = models.PositiveIntegerField(verbose_name='Сумма')
+    comment = models.TextField(blank=True, verbose_name='Комментарий')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата отправки')
+
+    class Meta:
+        verbose_name = 'подтверждение оплаты'
+        verbose_name_plural = 'Подтверждения оплат'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.name} — {self.amount} ₽'
+
+
 class LegalDocument(models.Model):
     title = models.CharField(max_length=160, verbose_name='Название')
     slug = models.SlugField(max_length=100, unique=True, verbose_name='URL')
@@ -684,4 +700,3 @@ class LegalDocument(models.Model):
 
     def __str__(self):
         return self.title
-    
