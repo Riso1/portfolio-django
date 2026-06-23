@@ -173,7 +173,10 @@ def project_order(request):
         name = request.POST.get('name', '').strip()
         contact = request.POST.get('contact', '').strip()
         project_type = request.POST.get('project_type', '').strip()
-        budget = int(request.POST.get('budget', 0) or 0)
+        try:
+            budget = int(request.POST.get('budget', 0) or 0)
+        except ValueError:
+            budget = 0
         description = request.POST.get('description', '').strip()
         selected_options = request.POST.get('selected_options', '').strip()
 
@@ -201,7 +204,7 @@ def project_order(request):
             message,
             settings.DEFAULT_FROM_EMAIL,
             [settings.ORDER_EMAIL_TO],
-            fail_silently=True,
+            fail_silently=False,
         )
 
         return redirect('project_order_success')

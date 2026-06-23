@@ -2,231 +2,238 @@
 
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
-    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
-    <meta property="og:site_name" content="m0r64n4">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+        <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+        <meta property="og:site_name" content="m0r64n4">
 
-        {% if settings.site_title %}
-            <meta property="og:title" content="{{ settings.site_title }}">
-        {% else %}
-            <meta property="og:title" content="{{ settings.full_name }}">
-        {% endif %}
+            {% if settings.site_title %}
+                <meta property="og:title" content="{{ settings.site_title }}">
+            {% else %}
+                <meta property="og:title" content="{{ settings.full_name }}">
+            {% endif %}
+
+            {% if settings.meta_description %}
+                <meta property="og:description" content="{{ settings.meta_description }}">
+            {% endif %}
+
+            {% if settings.og_image %}
+                <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ settings.og_image.url }}">
+            {% endif %}
+
+        <title>{% if settings.site_title %}{{ settings.site_title }}{% else %}{{ settings.full_name }}{% endif %}</title>
 
         {% if settings.meta_description %}
-            <meta property="og:description" content="{{ settings.meta_description }}">
+            <meta name="description" content="{{ settings.meta_description }}">
         {% endif %}
 
-        {% if settings.og_image %}
-            <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ settings.og_image.url }}">
+        {% if settings.favicon %}
+            <link rel="icon" href="{{ settings.favicon.url }}">
         {% endif %}
 
-    <title>{% if settings.site_title %}{{ settings.site_title }}{% else %}{{ settings.full_name }}{% endif %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}?v={% cache_bust 'portfolio/css/style.css' %}">
 
-    {% if settings.meta_description %}
-        <meta name="description" content="{{ settings.meta_description }}">
-    {% endif %}
+        <meta name="yandex-verification" content="71f33e6a2bda3190" />
+        <meta name="google-site-verification" content="-lGvig9zRIKvW9VUIHQc9EolVMEJJm2AB6r0y0ZmEKk" />
 
-    {% if settings.favicon %}
-        <link rel="icon" href="{{ settings.favicon.url }}">
-    {% endif %}
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript">
+            (function(m,e,t,r,i,k,a){
+                m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                m[i].l=1*new Date();
+                for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+                k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+            })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109723465', 'ym');
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}?v={% cache_bust 'portfolio/css/style.css' %}">
+            ym(109723465, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/109723465" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
 
-    <meta name="yandex-verification" content="71f33e6a2bda3190" />
-    <meta name="google-site-verification" content="-lGvig9zRIKvW9VUIHQc9EolVMEJJm2AB6r0y0ZmEKk" />
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "Alexander Kotelevskii",
+          "alternateName": "m0r64n4",
+          "jobTitle": "Python Backend Developer",
+          "url": "https://m0r64n4.ru",
+          "image": "https://m0r64n4.ru/media/profile/foto.png",
+          "sameAs": [
+            "https://github.com/Riso1",
+            "https://t.me/sashakko"
+          ]
+        }
+        </script>
 
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-        (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=109723465', 'ym');
+    </head>
+    <body>
 
-        ym(109723465, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/109723465" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Alexander Kotelevskii",
-      "alternateName": "m0r64n4",
-      "jobTitle": "Python Backend Developer",
-      "url": "https://m0r64n4.ru",
-      "image": "https://m0r64n4.ru/media/profile/foto.png",
-      "sameAs": [
-        "https://github.com/Riso1",
-        "https://t.me/sashakko"
-      ]
-    }
-    </script>
-
-</head>
-<body>
-
-<header class="site-header sticky-top">
-    <nav class="container-fluid container-lg navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand site-logo" href="{% url 'home' %}">
-            <span class="site-logo__icon">&lt;/&gt;</span>
-            <span class="site-logo__text">m0r64n4</span>
-        </a>
-
-        <button class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mainNavbar"
-                aria-controls="mainNavbar"
-                aria-expanded="false"
-                aria-label="Открыть меню">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="mainNavbar">
-            <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
-                {% for section in menu_sections %}
-                    <a href="{% if request.path == '/' %}#{{ section.key }}{% else %}{% url 'home' %}#{{ section.key }}{% endif %}"
-                       class="nav-link">
-                        {{ section.title }}
-                    </a>
-                {% endfor %}
-
-                <a href="{% url 'template_demo_list' %}" class="nav-link">
-                    Шаблоны
+        <header class="site-header sticky-top">
+            <nav class="container-fluid container-lg navbar navbar-expand-lg navbar-dark">
+                <a class="navbar-brand site-logo" href="{% url 'home' %}">
+                    <span class="site-logo__icon">&lt;/&gt;</span>
+                    <span class="site-logo__text">m0r64n4</span>
                 </a>
 
-                {% if request.path == '/order/' %}
-                    <a href="#orderContacts"
-                       class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
-                        Отправить заявку
-                    </a>
-                {% else %}
-                    <a href="{% url 'project_order' %}"
-                       class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
-                        Заказать проект
-                    </a>
-                {% endif %}
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Открыть меню">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                {% if settings.resume %}
-                    <a href="{{ settings.resume.url }}"
-                       data-goal="resume_download"
-                       class="btn btn-outline-light btn-sm ms-lg-2 mt-2 mt-lg-0">
-                        Скачать резюме
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-</header>
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                        {% for section in menu_sections %}
+                            <a href="{% if request.path == '/' %}#{{ section.key }}{% else %}{% url 'home' %}#{{ section.key }}{% endif %}"
+                               class="nav-link">
+                                {{ section.title }}
+                            </a>
+                        {% endfor %}
 
-{% block content %}
-{% endblock %}
+                        <a href="{% url 'template_demo_list' %}" class="nav-link">
+                            Шаблоны
+                        </a>
 
-<footer class="site-footer">
-    <div class="container">
-        <div class="site-footer__inner">
-            <div>
-                {% if text_blocks.footer_text %}
-                    {{ text_blocks.footer_text.content|linebreaks }}
-                {% else %}
-                    <p>© {{ settings.full_name }}</p>
-                {% endif %}
-            </div>
-
-            <div class="site-footer__links">
-                {% for contact in contact_links %}
-                    <a href="{{ contact.url }}" target="_blank" aria-label="{{ contact.title }}">
-                        {% if contact.icon_class %}
-                            <i class="{{ contact.icon_class }}"></i>
+                        {% if request.path == '/order/' %}
+                            <a href="#orderContacts"
+                               class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
+                                Отправить заявку
+                            </a>
                         {% else %}
-                            {{ contact.title }}
+                            <a href="{% url 'project_order' %}"
+                               class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
+                                Заказать проект
+                            </a>
                         {% endif %}
-                    </a>
-                {% endfor %}
+
+                        {% if settings.resume %}
+                            <a href="{{ settings.resume.url }}"
+                               data-goal="resume_download"
+                               class="btn btn-outline-light btn-sm ms-lg-2 mt-2 mt-lg-0">
+                                Скачать резюме
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="site-footer">
+            <div class="container">
+                <div class="site-footer__inner">
+                    <div>
+                        {% if text_blocks.footer_text %}
+                            {{ text_blocks.footer_text.content|linebreaks }}
+                        {% else %}
+                            <p>© {{ settings.full_name }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="site-footer__links">
+                        {% for contact in contact_links %}
+                            <a href="{{ contact.url }}" target="_blank" aria-label="{{ contact.title }}">
+                                {% if contact.icon_class %}
+                                    <i class="{{ contact.icon_class }}"></i>
+                                {% else %}
+                                    {{ contact.title }}
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</footer>
+        </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.querySelectorAll('.navbar-collapse .nav-link').forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            const href = link.getAttribute('href');
+        <script>
+            document.querySelectorAll('.navbar-collapse .nav-link').forEach(function (link) {
+                link.addEventListener('click', function (event) {
+                    const href = link.getAttribute('href');
 
-            if (!href || !href.startsWith('#')) {
-                return;
-            }
+                    if (!href || !href.startsWith('#')) {
+                        return;
+                    }
 
-            event.preventDefault();
+                    event.preventDefault();
 
-            const target = document.querySelector(href);
-            const navbarCollapse = document.querySelector('.navbar-collapse');
-            const header = document.querySelector('.site-header');
+                    const target = document.querySelector(href);
+                    const navbarCollapse = document.querySelector('.navbar-collapse');
+                    const header = document.querySelector('.site-header');
 
-            if (!target || !header) {
-                return;
-            }
+                    if (!target || !header) {
+                        return;
+                    }
 
-            function scrollToTarget() {
-                const headerHeight = header.offsetHeight;
-                const targetPosition = target.getBoundingClientRect().top + window.scrollY;
-                const offsetPosition = targetPosition - headerHeight - 24;
+                    function scrollToTarget() {
+                        const headerHeight = header.offsetHeight;
+                        const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+                        const offsetPosition = targetPosition - headerHeight - 24;
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+
+                    if (navbarCollapse.classList.contains('show')) {
+                        const collapse = new bootstrap.Collapse(navbarCollapse);
+
+                        navbarCollapse.addEventListener('hidden.bs.collapse', function () {
+                            scrollToTarget();
+                        }, { once: true });
+
+                        collapse.hide();
+                    } else {
+                        scrollToTarget();
+                    }
                 });
-            }
+            });
+        </script>
 
-            if (navbarCollapse.classList.contains('show')) {
-                const collapse = new bootstrap.Collapse(navbarCollapse);
+        <script>
+            document.addEventListener('click', function (event) {
+                const link = event.target.closest('a');
 
-                navbarCollapse.addEventListener('hidden.bs.collapse', function () {
-                    scrollToTarget();
-                }, { once: true });
+                if (!link || typeof ym !== 'function') {
+                    return;
+                }
 
-                collapse.hide();
-            } else {
-                scrollToTarget();
-            }
-        });
-    });
-</script>
+                const href = link.getAttribute('href') || '';
 
-<script>
-    document.addEventListener('click', function (event) {
-        const link = event.target.closest('a');
+                if (href.includes('github.com')) {
+                    ym(109723465, 'reachGoal', 'github_click');
+                } else if (href.includes('t.me') || href.includes('telegram')) {
+                    ym(109723465, 'reachGoal', 'telegram_click');
+                } else if (href.startsWith('mailto:')) {
+                    ym(109723465, 'reachGoal', 'email_click');
+                } else if (link.dataset.goal === 'resume_download') {
+                    ym(109723465, 'reachGoal', 'resume_download');
+                }
+            });
+        </script>
 
-        if (!link || typeof ym !== 'function') {
-            return;
-        }
+    {% if request.path != '/order/' %}
+        <a href="{% url 'project_order' %}" class="floating-order-button">
+            <span>🚀</span>
+            <strong>Рассчитать проект</strong>
+        </a>
+    {% endif %}
 
-        const href = link.getAttribute('href') || '';
-
-        if (href.includes('github.com')) {
-            ym(109723465, 'reachGoal', 'github_click');
-        } else if (href.includes('t.me') || href.includes('telegram')) {
-            ym(109723465, 'reachGoal', 'telegram_click');
-        } else if (href.startsWith('mailto:')) {
-            ym(109723465, 'reachGoal', 'email_click');
-        } else if (link.dataset.goal === 'resume_download') {
-            ym(109723465, 'reachGoal', 'resume_download');
-        }
-    });
-</script>
-
-</body>
+    </body>
 </html>
