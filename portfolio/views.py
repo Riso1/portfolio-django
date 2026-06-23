@@ -16,6 +16,7 @@ from .models import (
     OrderWorkTerm,
     OrderPaymentSettings,
     LegalDocument,
+    ProjectOrder,
 )
 from django.http import HttpResponse
 from django.urls import reverse
