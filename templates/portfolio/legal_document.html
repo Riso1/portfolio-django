@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <article class="privacy-page">
+        <h1>{{ document.title }}</h1>
+        {{ document.content|safe }}
+    </article>
+</section>
+
+{% endblock %}

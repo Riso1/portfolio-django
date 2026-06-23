@@ -6,6 +6,9 @@ from .views import (
     sitemap_xml,
     template_demo_list,
     template_demo_detail,
+    project_order,
+    project_order_success,
+    legal_document,
 )
 
 urlpatterns = [
@@ -15,4 +18,7 @@ urlpatterns = [
     path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
     path('templates/', template_demo_list, name='template_demo_list'),
     path('templates/<slug:slug>/', template_demo_detail, name='template_demo_detail'),
+    path('order/', project_order, name='project_order'),
+    path('order/success/', project_order_success, name='project_order_success'),
+    path('legal/<slug:slug>/', legal_document, name='legal_document'),
 ]

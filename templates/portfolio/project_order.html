@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <form method="post" class="project-order" id="projectOrderForm">
+        {% csrf_token %}
+
+        <input type="hidden" name="project_type" id="projectTypeInput" value="{{ project_types.0.slug }}">
+        <input type="hidden" name="budget" id="budgetInput" value="0">
+        <input type="hidden" name="selected_options" id="selectedOptionsInput">
+
+        <div class="project-order__hero">
+            <span>Заявка на проект</span>
+            <h1>Расскажите, что нужно сделать</h1>
+            <p>
+                Выберите тип проекта, детали, сроки и опции. Калькулятор покажет примерную стоимость.
+            </p>
+        </div>
+
+        <div class="project-order__grid">
+            <div class="project-order__main">
+                <div class="order-step">
+                    <h2>1. Что нужно разработать?</h2>
+
+                    <div class="order-type-grid">
+                        {% for project_type in project_types %}
+                            <button class="order-type {% if forloop.first %}active{% endif %}"
+                                    type="button"
+                                    data-type="{{ project_type.slug }}"
+                                    data-title="{{ project_type.title }}">
+                                <strong>{{ project_type.title }}</strong>
+                                <span>{{ project_type.subtitle }}</span>
+                            </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="order-step">
+                    <h2>2. Детали проекта</h2>
+
+                    {% for project_type in project_types %}
+                        <div class="order-dynamic {% if forloop.first %}active{% endif %}"
+                             data-panel="{{ project_type.slug }}">
+                            {% for group in project_type.option_groups.all %}
+                                {% if group.is_active %}
+                                    <h3>{{ group.title }}</h3>
+
+                                    {% if group.input_type == 'radio' %}
+                                        <div class="order-choice-grid">
+                                            {% for option in group.options.all %}
+                                                {% if option.is_active %}
+                                                    <label>
+                                                        <input type="radio"
+                                                               name="group_{{ group.id }}"
+                                                               data-price="{{ option.price }}"
+                                                               data-title="{{ option.title }}"
+                                                               {% if option.is_default or forloop.first %}checked{% endif %}>
+                                                        {{ option.title }}
+                                                        {% if option.price %}
+                                                            <strong>+{{ option.price }} ₽</strong>
+                                                        {% endif %}
+                                                    </label>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="order-options">
+                                            {% for option in group.options.all %}
+                                                {% if option.is_active %}
+                                                    <label>
+                                                        <input type="checkbox"
+                                                               data-price="{{ option.price }}"
+                                                               data-title="{{ option.title }}"
+                                                               {% if option.is_default %}checked{% endif %}>
+                                                        {{ option.title }}
+                                                        {% if option.price %}
+                                                            <strong>+{{ option.price }} ₽</strong>
+                                                        {% endif %}
+                                                    </label>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% empty %}
+                                <p class="order-note">
+                                    Для этого типа проекта пока не добавлены опции в админке.
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <textarea class="order-other"
+                              id="orderOtherText"
+                              rows="4"
+                              placeholder="Если нужно что-то другое — опишите здесь"></textarea>
+                </div>
+
+                <div class="order-step">
+                    <h2>3. Сроки</h2>
+
+                    <select class="order-select" id="deadlineSelect">
+                        {% for deadline in deadlines %}
+                            <option value="{{ deadline.multiplier|stringformat:'s'|cut:',' }}">
+                                {{ deadline.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="order-step" id="orderContacts">
+                    <h2>4. Контакты</h2>
+
+                    <div class="order-fields">
+                        <input name="name" type="text" placeholder="Ваше имя" required>
+                        <input name="contact" type="text" placeholder="Telegram, email или телефон" required>
+                        <textarea name="description" rows="5" placeholder="Коротко опишите задачу"></textarea>
+                    </div>
+
+                    <div class="order-terms">
+                        <h2>Условия работы</h2>
+
+                        <div class="order-terms__cards">
+                            {% for term in work_terms %}
+                                <div>
+                                    <strong>{{ term.title }}</strong>
+                                    <p>{{ term.text }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {% if payment_settings %}
+                        <div class="order-payment-info">
+                            <h2>{{ payment_settings.title }}</h2>
+
+                            <div class="order-payment-info__grid">
+                                {% if payment_settings.qr_code %}
+                                    <img src="{{ payment_settings.qr_code.url }}" alt="QR-код для оплаты">
+                                {% endif %}
+
+                                <div>
+                                    <p><strong>Банк:</strong> {{ payment_settings.bank_name }}</p>
+
+                                    {% if payment_settings.recipient_name %}
+                                        <p><strong>Получатель:</strong> {{ payment_settings.recipient_name }}</p>
+                                    {% endif %}
+
+                                    {% if payment_settings.phone_or_payment_info %}
+                                        <p><strong>Реквизиты:</strong> {{ payment_settings.phone_or_payment_info }}</p>
+                                    {% endif %}
+
+                                    {% if payment_settings.description %}
+                                        <p>{{ payment_settings.description }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <label class="order-agreement">
+                        <input type="checkbox" required>
+                        <span>
+                            Я согласен на обработку персональных данных и ознакомлен с
+                            <a href="{% url 'legal_document' 'privacy-policy' %}" target="_blank">политикой обработки персональных данных</a>
+                            и условиями работы.
+                        </span>
+                    </label>
+
+                    <button class="project-order__submit" type="submit">
+                        Отправить заявку
+                    </button>
+                </div>
+            </div>
+
+            <aside class="project-order__summary">
+                <span>Предварительная стоимость</span>
+
+                <div class="order-price">
+                    <strong id="orderPrice">0</strong> ₽
+                </div>
+
+                <div class="order-summary-list" id="orderSummaryList">
+                    <p>Выберите параметры проекта</p>
+                </div>
+
+                <p class="order-note">
+                    Это предварительная оценка. Точная стоимость зависит от деталей проекта.
+                </p>
+            </aside>
+        </div>
+    </form>
+</section>
+
+<script>
+const orderTypes = document.querySelectorAll(".order-type");
+const orderPanels = document.querySelectorAll(".order-dynamic");
+const deadlineSelect = document.querySelector("#deadlineSelect");
+const orderPrice = document.querySelector("#orderPrice");
+const orderSummaryList = document.querySelector("#orderSummaryList");
+const projectTypeInput = document.querySelector("#projectTypeInput");
+const budgetInput = document.querySelector("#budgetInput");
+const selectedOptionsInput = document.querySelector("#selectedOptionsInput");
+const orderOtherText = document.querySelector("#orderOtherText");
+
+let activeType = orderTypes[0] ? orderTypes[0].dataset.type : "";
+let projectTitle = orderTypes[0] ? orderTypes[0].dataset.title : "";
+
+function money(value) {
+    return new Intl.NumberFormat("ru-RU").format(value);
+}
+
+function getActivePanel() {
+    return document.querySelector(`.order-dynamic[data-panel="${activeType}"]`);
+}
+
+function updateOrder() {
+    const panel = getActivePanel();
+    const selected = [];
+    let total = 0;
+
+    if (panel) {
+        const checkedRadios = panel.querySelectorAll('input[type="radio"]:checked');
+        checkedRadios.forEach(input => {
+            total += Number(input.dataset.price || 0);
+            selected.push(input.dataset.title);
+        });
+
+        const checkedOptions = panel.querySelectorAll('input[type="checkbox"]:checked');
+        checkedOptions.forEach(input => {
+            total += Number(input.dataset.price || 0);
+            selected.push(input.dataset.title);
+        });
+    }
+
+    const deadlineMultiplier = Number(String(deadlineSelect.value || 1).replace(",", "."));
+    total = Math.round(total * deadlineMultiplier);
+
+    const otherText = orderOtherText.value.trim();
+    const finalOptions = [...selected];
+
+    if (otherText) {
+        finalOptions.push("Дополнительно: " + otherText);
+    }
+
+    orderPrice.textContent = money(total);
+    budgetInput.value = total;
+    projectTypeInput.value = activeType;
+    selectedOptionsInput.value = finalOptions.length ? finalOptions.join(", ") : "Опции не выбраны";
+
+    orderSummaryList.innerHTML = `
+        <p>Тип проекта: ${projectTitle}</p>
+        <p>Детали: ${selected.length ? selected.join(", ") : "не выбраны"}</p>
+        <p>Срочность: ${deadlineSelect.options[deadlineSelect.selectedIndex]?.text || "не выбрана"}</p>
+    `;
+}
+
+function switchProjectType(button) {
+    orderTypes.forEach(item => item.classList.remove("active"));
+    button.classList.add("active");
+
+    activeType = button.dataset.type;
+    projectTitle = button.dataset.title;
+
+    orderPanels.forEach(panel => {
+        panel.classList.toggle("active", panel.dataset.panel === activeType);
+    });
+
+    updateOrder();
+}
+
+orderTypes.forEach(button => {
+    button.addEventListener("click", () => switchProjectType(button));
+});
+
+document.querySelectorAll(".order-dynamic input").forEach(input => {
+    input.addEventListener("change", updateOrder);
+});
+
+deadlineSelect.addEventListener("change", updateOrder);
+orderOtherText.addEventListener("input", updateOrder);
+
+updateOrder();
+</script>
+
+{% endblock %}

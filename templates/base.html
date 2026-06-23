@@ -106,6 +106,18 @@
                     Шаблоны
                 </a>
 
+                {% if request.path == '/order/' %}
+                    <a href="#orderContacts"
+                       class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
+                        Отправить заявку
+                    </a>
+                {% else %}
+                    <a href="{% url 'project_order' %}"
+                       class="btn btn-primary btn-sm ms-lg-2 mt-2 mt-lg-0">
+                        Заказать проект
+                    </a>
+                {% endif %}
+
                 {% if settings.resume %}
                     <a href="{{ settings.resume.url }}"
                        data-goal="resume_download"

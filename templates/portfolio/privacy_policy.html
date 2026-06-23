@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm mb-4">
+        ← На главную
+    </a>
+
+    <article class="privacy-page">
+        {% if text_blocks.privacy_policy %}
+            {{ text_blocks.privacy_policy.content|safe }}
+        {% else %}
+            <h1>Политика обработки персональных данных</h1>
+            <p>Политика пока не заполнена.</p>
+        {% endif %}
+    </article>
+</section>
+
+{% endblock %}

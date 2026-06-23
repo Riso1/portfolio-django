@@ -478,3 +478,210 @@ class TemplateDemo(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ProjectOrder(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'Новая'),
+        ('in_progress', 'В работе'),
+        ('done', 'Завершена'),
+        ('rejected', 'Отклонена'),
+    ]
+
+    PROJECT_TYPE_CHOICES = [
+        ('website', 'Сайт'),
+        ('bot', 'Telegram-бот'),
+        ('webapp', 'Веб-приложение'),
+        ('improvement', 'Доработка'),
+        ('other', 'Другое'),
+    ]
+
+    name = models.CharField(max_length=120, verbose_name='Имя')
+    contact = models.CharField(max_length=200, verbose_name='Контакт')
+    project_type = models.CharField(
+        max_length=30,
+        choices=PROJECT_TYPE_CHOICES,
+        verbose_name='Тип проекта'
+    )
+    budget = models.PositiveIntegerField(default=0, verbose_name='Предварительная стоимость')
+    description = models.TextField(blank=True, verbose_name='Описание проекта')
+    selected_options = models.TextField(blank=True, verbose_name='Выбранные опции')
+    status = models.CharField(
+        max_length=30,
+        choices=STATUS_CHOICES,
+        default='new',
+        verbose_name='Статус'
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создана')
+
+    class Meta:
+        verbose_name = 'заявка на проект'
+        verbose_name_plural = 'Заявки на проекты'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.name} — {self.get_project_type_display()}'
+
+
+class OrderProjectType(models.Model):
+    title = models.CharField(max_length=120, verbose_name='Название')
+    slug = models.SlugField(max_length=80, unique=True, verbose_name='Код')
+    subtitle = models.CharField(max_length=200, blank=True, verbose_name='Подпись')
+    base_price = models.PositiveIntegerField(default=0, verbose_name='Базовая цена')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+
+    class Meta:
+        verbose_name = 'тип проекта'
+        verbose_name_plural = 'Оформление заказа: типы проектов'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class OrderOptionGroup(models.Model):
+    project_type = models.ForeignKey(
+        OrderProjectType,
+        on_delete=models.CASCADE,
+        related_name='option_groups',
+        verbose_name='Тип проекта'
+    )
+    title = models.CharField(max_length=120, verbose_name='Название группы')
+    input_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('radio', 'Один вариант'),
+            ('checkbox', 'Несколько вариантов'),
+        ],
+        default='checkbox',
+        verbose_name='Тип выбора'
+    )
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
+
+    class Meta:
+        verbose_name = 'группа опций заказа'
+        verbose_name_plural = 'Оформление заказа: группы опций'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return f'{self.project_type} — {self.title}'
+
+
+class OrderOption(models.Model):
+    group = models.ForeignKey(
+        OrderOptionGroup,
+        on_delete=models.CASCADE,
+        related_name='options',
+        verbose_name='Группа'
+    )
+    title = models.CharField(max_length=160, verbose_name='Название')
+    price = models.PositiveIntegerField(default=0, verbose_name='Цена')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_default = models.BooleanField(default=False, verbose_name='Выбрано по умолчанию')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
+
+    class Meta:
+        verbose_name = 'опция заказа'
+        verbose_name_plural = 'Оформление заказа: опции'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class OrderDeadline(models.Model):
+    title = models.CharField(max_length=120, verbose_name='Название')
+    multiplier = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=1,
+        verbose_name='Множитель цены'
+    )
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+
+    class Meta:
+        verbose_name = 'срок выполнения'
+        verbose_name_plural = 'Оформление заказа: сроки'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class OrderWorkTerm(models.Model):
+    title = models.CharField(max_length=120, verbose_name='Заголовок')
+    text = models.TextField(verbose_name='Текст')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_active = models.BooleanField(default=True, verbose_name='Активно')
+
+    class Meta:
+        verbose_name = 'условие работы'
+        verbose_name_plural = 'Оформление заказа: условия работы'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class OrderWebsiteGroup(OrderOptionGroup):
+    class Meta:
+        proxy = True
+        verbose_name = 'Сайт'
+        verbose_name_plural = 'Оформление заказа: Сайт'
+
+
+class OrderBotGroup(OrderOptionGroup):
+    class Meta:
+        proxy = True
+        verbose_name = 'Telegram-бот'
+        verbose_name_plural = 'Оформление заказа: Telegram-бот'
+
+
+class OrderWebAppGroup(OrderOptionGroup):
+    class Meta:
+        proxy = True
+        verbose_name = 'Веб-сервис'
+        verbose_name_plural = 'Оформление заказа: Веб-сервис'
+
+
+class OrderImprovementGroup(OrderOptionGroup):
+    class Meta:
+        proxy = True
+        verbose_name = 'Доработка'
+        verbose_name_plural = 'Оформление заказа: Доработка'
+
+
+class OrderPaymentSettings(models.Model):
+    title = models.CharField(max_length=120, default='Оплата по СБП', verbose_name='Заголовок')
+    bank_name = models.CharField(max_length=120, default='Альфа-Банк', verbose_name='Банк')
+    recipient_name = models.CharField(max_length=160, blank=True, verbose_name='Получатель')
+    phone_or_payment_info = models.CharField(max_length=200, blank=True, verbose_name='Телефон / реквизиты')
+    qr_code = models.ImageField(upload_to='payment/', blank=True, null=True, verbose_name='QR-код')
+    description = models.TextField(blank=True, verbose_name='Описание')
+
+    class Meta:
+        verbose_name = 'настройки оплаты'
+        verbose_name_plural = 'Оформление заказа: оплата'
+
+    def __str__(self):
+        return self.title
+
+
+class LegalDocument(models.Model):
+    title = models.CharField(max_length=160, verbose_name='Название')
+    slug = models.SlugField(max_length=100, unique=True, verbose_name='URL')
+    content = models.TextField(verbose_name='Содержание')
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено')
+
+    class Meta:
+        verbose_name = 'юридический документ'
+        verbose_name_plural = 'Юридическая информация'
+        ordering = ['title']
+
+    def __str__(self):
+        return self.title
+    
