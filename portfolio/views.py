@@ -22,6 +22,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
 
+import traceback
 
 def home(request):
     site_settings = SiteSettings.objects.first()
@@ -170,47 +171,54 @@ def project_order(request):
     site_settings = SiteSettings.objects.first()
 
     if request.method == 'POST':
-        name = request.POST.get('name', '').strip()
-        contact = request.POST.get('contact', '').strip()
-        project_type = request.POST.get('project_type', '').strip()
         try:
-            budget = int(request.POST.get('budget', 0) or 0)
-        except ValueError:
-            budget = 0
-        description = request.POST.get('description', '').strip()
-        selected_options = request.POST.get('selected_options', '').strip()
+            name = request.POST.get('name', '').strip()
+            contact = request.POST.get('contact', '').strip()
+            project_type = request.POST.get('project_type', '').strip()
 
-        order = ProjectOrder.objects.create(
-            name=name,
-            contact=contact,
-            project_type=project_type,
-            budget=budget,
-            description=description,
-            selected_options=selected_options,
-        )
+            try:
+                budget = int(request.POST.get('budget', 0) or 0)
+            except ValueError:
+                budget = 0
 
-        subject = f'Новая заявка на проект: {order.get_project_type_display()}'
-        message = (
-            f'Имя: {order.name}\n'
-            f'Контакт: {order.contact}\n'
-            f'Тип проекта: {order.get_project_type_display()}\n'
-            f'Бюджет: {order.budget} ₽\n\n'
-            f'Опции:\n{order.selected_options}\n\n'
-            f'Описание:\n{order.description}'
-        )
+            description = request.POST.get('description', '').strip()
+            selected_options = request.POST.get('selected_options', '').strip()
 
-        try:
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.ORDER_EMAIL_TO],
-                fail_silently=False,
+            order = ProjectOrder.objects.create(
+                name=name,
+                contact=contact,
+                project_type=project_type,
+                budget=budget,
+                description=description,
+                selected_options=selected_options,
             )
-        except Exception as error:
-            print(f'Ошибка отправки письма заявки: {error}')
 
-        return redirect('/order/success/')
+            subject = f'Новая заявка на проект: {order.get_project_type_display()}'
+            message = (
+                f'Имя: {order.name}\n'
+                f'Контакт: {order.contact}\n'
+                f'Тип проекта: {order.get_project_type_display()}\n'
+                f'Бюджет: {order.budget} ₽\n\n'
+                f'Опции:\n{order.selected_options}\n\n'
+                f'Описание:\n{order.description}'
+            )
+
+            try:
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.ORDER_EMAIL_TO],
+                    fail_silently=False,
+                )
+            except Exception as error:
+                print(f'Ошибка отправки письма заявки: {error}')
+
+            return redirect('/order/success/')
+
+        except Exception:
+            traceback.print_exc()
+            raise
 
     project_types = (
         OrderProjectType.objects
