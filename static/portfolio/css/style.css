@@ -159,10 +159,12 @@ section {
 }
 
 .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1050;
     background: rgba(15, 23, 42, 0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid #1f2937;
-    z-index: 1000;
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
 }
 
 .nav-link {
