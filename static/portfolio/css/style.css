@@ -625,10 +625,15 @@ section[id] {
 }
 
 .template-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 28px 0 34px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+}
+
+.template-filter::-webkit-scrollbar {
+    display: none;
 }
 
 .template-filter__button {
@@ -1280,4 +1285,49 @@ section[id] {
     .site-footer__links {
         justify-content: center;
     }
+}
+
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .project-order {
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .project-order__hero h1 {
+        max-width: 100%;
+        overflow-wrap: break-word;
+    }
+
+    .project-order__grid,
+    .project-order__hero {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .order-step,
+    .project-order__summary {
+        min-width: 0;
+    }
+
+    .order-type,
+    .order-choice-grid label,
+    .order-options label {
+        min-width: 0;
+    }
+}
+
+.template-filter__button {
+    flex-shrink: 0;
+}
+
+.order-payment-methods p {
+    margin: 12px 0 0;
+    color: #cbd5e1;
+    line-height: 1.6;
 }

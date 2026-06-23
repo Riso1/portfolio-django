@@ -133,34 +133,6 @@
                         </div>
                     </div>
 
-                    {% if payment_settings %}
-                        <div class="order-payment-info">
-                            <h2>{{ payment_settings.title }}</h2>
-
-                            <div class="order-payment-info__grid">
-                                {% if payment_settings.qr_code %}
-                                    <img src="{{ payment_settings.qr_code.url }}" alt="QR-код для оплаты">
-                                {% endif %}
-
-                                <div>
-                                    <p><strong>Банк:</strong> {{ payment_settings.bank_name }}</p>
-
-                                    {% if payment_settings.recipient_name %}
-                                        <p><strong>Получатель:</strong> {{ payment_settings.recipient_name }}</p>
-                                    {% endif %}
-
-                                    {% if payment_settings.phone_or_payment_info %}
-                                        <p><strong>Реквизиты:</strong> {{ payment_settings.phone_or_payment_info }}</p>
-                                    {% endif %}
-
-                                    {% if payment_settings.description %}
-                                        <p>{{ payment_settings.description }}</p>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-
                     <div class="order-consent">
                         <label class="order-consent__label">
                             <input type="checkbox" required>
@@ -211,13 +183,11 @@
                 </div>
 
                 <div class="order-payment-methods">
-                    <span>Способы оплаты</span>
+                    <span>Оплата</span>
 
-                    <ul>
-                        <li>СБП</li>
-                        <li>Альфа-Банк</li>
-                        <li>Банковская карта</li>
-                    </ul>
+                    <p>
+                        Реквизиты для предоплаты отправлю после согласования задачи, стоимости и сроков.
+                    </p>
                 </div>
 
                 <p class="order-note">
