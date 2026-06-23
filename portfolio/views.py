@@ -70,6 +70,7 @@ def home(request):
         'experience_items': experience_items,
         'education_items': education_items,
         'menu_sections': menu_sections,
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/index.html', context)
@@ -84,6 +85,7 @@ def project_detail(request, slug):
     context = {
         'project': project,
         'settings': SiteSettings.objects.first(),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/project_detail.html', context)
@@ -142,6 +144,7 @@ def template_demo_list(request):
             block.key: block for block in TextBlock.objects.all()
         },
         'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/template_demo_list.html', context)
@@ -162,6 +165,7 @@ def template_demo_detail(request, slug):
             block.key: block for block in TextBlock.objects.all()
         },
         'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/template_demo_detail.html', context)
@@ -238,6 +242,7 @@ def project_order(request):
             block.key: block for block in TextBlock.objects.all()
         },
         'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/project_order.html', context)
@@ -251,6 +256,7 @@ def project_order_success(request):
             block.key: block for block in TextBlock.objects.all()
         },
         'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/project_order_success.html', context)
@@ -271,6 +277,7 @@ def legal_document(request, slug):
             block.key: block for block in TextBlock.objects.all()
         },
         'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
     }
 
     return render(request, 'portfolio/legal_document.html', context)

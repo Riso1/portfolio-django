@@ -155,6 +155,16 @@
                             </a>
                         {% endfor %}
                     </div>
+
+                    {% if legal_documents %}
+                        <div class="site-footer__legal">
+                            {% for document in legal_documents %}
+                                <a href="{% url 'legal_document' document.slug %}">
+                                    {{ document.title }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </footer>

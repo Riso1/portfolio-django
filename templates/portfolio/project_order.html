@@ -161,14 +161,26 @@
                         </div>
                     {% endif %}
 
-                    <label class="order-agreement">
-                        <input type="checkbox" required>
-                        <span>
-                            Я согласен на обработку персональных данных и ознакомлен с
-                            <a href="{% url 'legal_document' 'privacy-policy' %}" target="_blank">политикой обработки персональных данных</a>
-                            и условиями работы.
-                        </span>
-                    </label>
+                    <div class="order-consent">
+                        <label class="order-consent__label">
+                            <input type="checkbox" required>
+
+                            <span>
+                                Я согласен на
+                                <a href="{% url 'legal_document' 'privacy-policy' %}"
+                                   target="_blank">
+                                    обработку персональных данных
+                                </a>
+
+                                и ознакомлен с
+
+                                <a href="{% url 'legal_document' 'public-offer' %}"
+                                   target="_blank">
+                                    публичной офертой
+                                </a>.
+                            </span>
+                        </label>
+                    </div>
 
                     <button class="project-order__submit" type="submit">
                         Отправить заявку
