@@ -228,7 +228,7 @@
             });
         </script>
 
-    {% if request.path != '/order/' %}
+    {% if request.path != '/order/' and request.path != '/order/success/' %}
         <a href="{% url 'project_order' %}" class="floating-order-button">
             <span>🚀</span>
             <strong>Рассчитать проект</strong>
