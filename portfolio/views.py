@@ -199,15 +199,18 @@ def project_order(request):
             f'Описание:\n{order.description}'
         )
 
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [settings.ORDER_EMAIL_TO],
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.ORDER_EMAIL_TO],
+                fail_silently=False,
+            )
+        except Exception as error:
+            print(f'Ошибка отправки письма заявки: {error}')
 
-        return redirect('project_order_success')
+        return redirect('/order/success/')
 
     project_types = (
         OrderProjectType.objects
