@@ -159,12 +159,30 @@ section {
 }
 
 .site-header {
-    position: sticky;
+    position: fixed !important;
     top: 0;
-    z-index: 1050;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    width: 100%;
     background: rgba(15, 23, 42, 0.92);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+body {
+    padding-top: 76px;
+}
+
+@media (max-width: 991px) {
+    body {
+        padding-top: 68px;
+    }
+
+    .navbar-collapse {
+        max-height: calc(100vh - 68px);
+        overflow-y: auto;
+    }
 }
 
 .nav-link {
@@ -1461,5 +1479,15 @@ body {
     .payment-page__grid {
         grid-template-columns: 1fr;
         padding: 0 20px 30px;
+    }
+}
+
+body {
+    padding-top: 76px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 68px;
     }
 }
