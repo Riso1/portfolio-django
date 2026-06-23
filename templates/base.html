@@ -1,4 +1,4 @@
-{% load static %}
+{% load static cache_bust %}
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -38,7 +38,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}?v={% cache_bust 'portfolio/css/style.css' %}">
 
     <meta name="yandex-verification" content="71f33e6a2bda3190" />
     <meta name="google-site-verification" content="-lGvig9zRIKvW9VUIHQc9EolVMEJJm2AB6r0y0ZmEKk" />
@@ -96,10 +96,15 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
             <div class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
                 {% for section in menu_sections %}
-                    <a href="#{{ section.key }}" class="nav-link">
+                    <a href="{% if request.path == '/' %}#{{ section.key }}{% else %}{% url 'home' %}#{{ section.key }}{% endif %}"
+                       class="nav-link">
                         {{ section.title }}
                     </a>
                 {% endfor %}
+
+                <a href="{% url 'template_demo_list' %}" class="nav-link">
+                    Шаблоны
+                </a>
 
                 {% if settings.resume %}
                     <a href="{{ settings.resume.url }}"

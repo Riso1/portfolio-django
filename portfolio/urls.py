@@ -1,9 +1,18 @@
 from django.urls import path
-from .views import home, project_detail, robots_txt, sitemap_xml
+from .views import (
+    home,
+    project_detail,
+    robots_txt,
+    sitemap_xml,
+    template_demo_list,
+    template_demo_detail,
+)
 
 urlpatterns = [
     path('', home, name='home'),
     path('projects/<slug:slug>/', project_detail, name='project_detail'),
     path('robots.txt', robots_txt, name='robots_txt'),
     path('sitemap.xml', sitemap_xml, name='sitemap_xml'),
+    path('templates/', template_demo_list, name='template_demo_list'),
+    path('templates/<slug:slug>/', template_demo_detail, name='template_demo_detail'),
 ]

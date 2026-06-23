@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load cache_bust %}
+
+{% block content %}
+
+<section class="container py-5">
+    <div class="d-flex gap-2 mb-4">
+        <a href="{% url 'template_demo_list' %}" class="btn btn-outline-light btn-sm">
+            ← Назад к шаблонам
+        </a>
+
+        <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm">
+            На главную
+        </a>
+    </div>
+
+    <article class="template-detail">
+        <div class="template-detail__header">
+            <span class="template-card__category">
+                {{ template_demo.get_category_display }}
+            </span>
+
+            <h1 class="mt-3">
+                {{ template_demo.title }}
+            </h1>
+
+            <p>
+                {{ template_demo.short_description }}
+            </p>
+
+            <div class="template-meta">
+                {% if template_demo.difficulty %}
+                    <span>Сложность: {{ template_demo.difficulty }}</span>
+                {% endif %}
+
+                {% if template_demo.features %}
+                    {% for feature in template_demo.features|split_features %}
+                        <span>{{ feature }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        {% if template_demo.html_code or template_demo.css_code or template_demo.js_code %}
+            <div class="template-preview">
+                <style>
+                    {{ template_demo.css_code|safe }}
+                </style>
+
+                <div class="template-preview__frame">
+                    {{ template_demo.html_code|safe }}
+                </div>
+
+                {% if template_demo.js_code %}
+                    <script>
+                        {{ template_demo.js_code|safe }}
+                    </script>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="template-code-panel">
+            <div class="template-code-tabs">
+                {% if template_demo.html_code %}
+                    <button class="template-code-tab active" data-code-tab="html">HTML</button>
+                {% endif %}
+
+                {% if template_demo.css_code %}
+                    <button class="template-code-tab" data-code-tab="css">CSS</button>
+                {% endif %}
+
+                {% if template_demo.js_code %}
+                    <button class="template-code-tab" data-code-tab="js">JS</button>
+                {% endif %}
+
+                <button class="template-copy-button" type="button">
+                    Скопировать
+                </button>
+            </div>
+
+            {% if template_demo.html_code %}
+                <pre class="template-code-content active" data-code-content="html"><code>{{ template_demo.html_code }}</code></pre>
+            {% endif %}
+
+            {% if template_demo.css_code %}
+                <pre class="template-code-content" data-code-content="css"><code>{{ template_demo.css_code }}</code></pre>
+            {% endif %}
+
+            {% if template_demo.js_code %}
+                <pre class="template-code-content" data-code-content="js"><code>{{ template_demo.js_code }}</code></pre>
+            {% endif %}
+        </div>
+    </article>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.template-code-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            const target = tab.dataset.codeTab;
+
+            document.querySelectorAll('.template-code-tab').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.template-code-content').forEach(content => content.classList.remove('active'));
+
+            tab.classList.add('active');
+
+            const targetBlock = document.querySelector('[data-code-content="' + target + '"]');
+            if (targetBlock) {
+                targetBlock.classList.add('active');
+            }
+        });
+    });
+
+    const copyButton = document.querySelector('.template-copy-button');
+
+    if (copyButton) {
+        copyButton.addEventListener('click', function () {
+            const activeCode = document.querySelector('.template-code-content.active code');
+
+            if (!activeCode) return;
+
+            navigator.clipboard.writeText(activeCode.innerText);
+
+            copyButton.innerText = 'Скопировано';
+            setTimeout(() => copyButton.innerText = 'Скопировать', 1600);
+        });
+    }
+});
+</script>
+
+{% endblock %}

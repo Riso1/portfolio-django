@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="container py-5">
+    <a href="{% url 'home' %}" class="btn btn-outline-light btn-sm mb-4">
+        ← На главную
+    </a>
+
+    <div class="section-heading mb-5">
+        <h1 class="display-5 fw-bold">Шаблоны</h1>
+        <p>
+            Набор UI-компонентов, анимаций, каруселей, форм и интерфейсных решений,
+            которые можно использовать в веб-проектах.
+        </p>
+    </div>
+
+    <div class="template-filter">
+        <button class="template-filter__button active" data-filter="all">
+            Все
+        </button>
+
+        {% for use_case in use_cases %}
+            <button class="template-filter__button" data-filter="{{ use_case.slug }}">
+                {{ use_case.title }}
+            </button>
+        {% endfor %}
+    </div>
+
+    <div class="row g-4">
+        {% for template_demo in template_demos %}
+            <div class="col-md-6 col-lg-4">
+                <article class="template-card h-100"
+                         data-use-cases="{% for use_case in template_demo.use_cases.all %}{{ use_case.slug }} {% endfor %}">
+                    {% if template_demo.cover %}
+                        <img src="{{ template_demo.cover.url }}"
+                             class="template-card__image"
+                             alt="{{ template_demo.title }}">
+                    {% endif %}
+
+                    <div class="template-card__body">
+                        <span class="template-card__category">
+                            {{ template_demo.get_category_display }}
+                        </span>
+
+                        <h2 class="h4 mt-3">
+                            {{ template_demo.title }}
+                        </h2>
+
+                        <p>
+                            {{ template_demo.short_description }}
+                        </p>
+
+                        <a href="{% url 'template_demo_detail' template_demo.slug %}"
+                           class="btn btn-outline-light btn-sm">
+                            Смотреть шаблон
+                        </a>
+                    </div>
+                </article>
+            </div>
+        {% empty %}
+            <p>Шаблоны пока не добавлены.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.template-filter__button');
+    const cards = document.querySelectorAll('.template-card');
+
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const filter = button.dataset.filter;
+
+            buttons.forEach(item => item.classList.remove('active'));
+            button.classList.add('active');
+
+            cards.forEach(function (card) {
+                const useCases = card.dataset.useCases || '';
+
+                if (filter === 'all' || useCases.includes(filter)) {
+                    card.closest('.col-md-6, .col-lg-4').classList.remove('template-card-hidden');
+                } else {
+                    card.closest('.col-md-6, .col-lg-4').classList.add('template-card-hidden');
+                }
+            });
+        });
+    });
+});
+</script>
+
+{% endblock %}

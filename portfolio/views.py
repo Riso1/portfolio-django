@@ -9,6 +9,8 @@ from .models import (
     ContactLink,
     Project,
     Certificate,
+    TemplateUseCase,
+    TemplateDemo,
 )
 from django.http import HttpResponse
 from django.urls import reverse
@@ -112,3 +114,36 @@ def sitemap_xml(request):
     xml.append('</urlset>')
 
     return HttpResponse('\n'.join(xml), content_type='application/xml')
+
+
+def template_demo_list(request):
+    template_demos = TemplateDemo.objects.filter(
+        is_published=True
+    )
+    use_cases = TemplateUseCase.objects.filter(
+        is_active=True,
+        templates__is_published=True,
+    ).distinct()
+
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'template_demos': template_demos,
+        'use_cases': use_cases,
+    }
+
+    return render(request, 'portfolio/template_demo_list.html', context)
+
+
+def template_demo_detail(request, slug):
+    template_demo = get_object_or_404(
+        TemplateDemo,
+        slug=slug,
+        is_published=True,
+    )
+
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'template_demo': template_demo,
+    }
+
+    return render(request, 'portfolio/template_demo_detail.html', context)

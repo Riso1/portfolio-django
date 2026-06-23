@@ -442,3 +442,231 @@ section[id] {
 .site-logo__text {
     color: #f8fafc;
 }
+
+.template-card,
+.template-detail {
+    background: linear-gradient(180deg, #1e293b 0%, #111827 100%);
+    border: 1px solid #334155;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.template-card {
+    transition: 0.3s;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    border-color: #3b82f6;
+}
+
+.template-card__image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.template-card__body,
+.template-detail__header {
+    padding: 24px;
+}
+
+.template-card__category {
+    display: inline-block;
+    background-color: rgba(59, 130, 246, 0.16);
+    border: 1px solid #3b82f6;
+    color: #bfdbfe;
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+.template-preview {
+    padding: 24px;
+    border-top: 1px solid #334155;
+}
+
+.template-preview__frame {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 32px;
+    overflow: hidden;
+}
+
+.template-code-grid {
+    display: grid;
+    gap: 20px;
+    padding: 24px;
+}
+
+.template-code-block {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.template-code-block h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+}
+
+.template-code-block pre {
+    margin: 0;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+}
+
+.template-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.template-meta span {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #334155;
+    border-radius: 999px;
+    padding: 6px 12px;
+    color: #bfdbfe;
+    background: rgba(15, 23, 42, 0.6);
+    font-size: 13px;
+}
+
+.template-code-panel {
+    margin: 24px;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #020617;
+}
+
+.template-code-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-bottom: 1px solid #334155;
+    background: #0f172a;
+}
+
+.template-code-tab,
+.template-copy-button {
+    border: 1px solid #334155;
+    border-radius: 999px;
+    padding: 7px 14px;
+    color: #cbd5e1;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.template-code-tab.active {
+    color: #ffffff;
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.22);
+}
+
+.template-copy-button {
+    margin-left: auto;
+}
+
+.template-copy-button:hover,
+.template-code-tab:hover {
+    border-color: #3b82f6;
+}
+
+.template-code-content {
+    display: none;
+    max-height: 520px;
+    margin: 0;
+    padding: 22px;
+    overflow: auto;
+    color: #cbd5e1;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.template-code-content.active {
+    display: block;
+}
+
+.template-code-content::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.template-code-content::-webkit-scrollbar-track {
+    background: #020617;
+}
+
+.template-code-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #3b82f6, #7c3aed);
+    border-radius: 999px;
+    border: 2px solid #020617;
+}
+
+.template-code-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #60a5fa, #8b5cf6);
+}
+
+.template-code-content {
+    scrollbar-width: thin;
+    scrollbar-color: #3b82f6 #020617;
+}
+
+.template-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 28px 0 34px;
+}
+
+.template-filter__button {
+    border: 1px solid #334155;
+    border-radius: 999px;
+    padding: 9px 15px;
+    color: #cbd5e1;
+    background: rgba(15, 23, 42, 0.7);
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.template-filter__button:hover,
+.template-filter__button.active {
+    color: #ffffff;
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.22);
+    transform: translateY(-2px);
+}
+
+.template-card-hidden {
+    display: none;
+}
+
+@media (max-width: 576px) {
+    .template-filter {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        margin: 24px 0 28px;
+        scrollbar-width: none;
+    }
+
+    .template-filter::-webkit-scrollbar {
+        display: none;
+    }
+
+    .template-filter__button {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        padding: 9px 14px;
+    }
+}

@@ -396,3 +396,85 @@ class Certificate(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class TemplateUseCase(models.Model):
+    title = models.CharField(max_length=100, unique=True, verbose_name='Название')
+    slug = models.SlugField(max_length=120, unique=True, verbose_name='URL-адрес')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_active = models.BooleanField(default=True, verbose_name='Активна')
+
+    class Meta:
+        verbose_name = 'категория применения'
+        verbose_name_plural = 'Для чего подходит'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title
+
+
+class TemplateDemo(models.Model):
+    difficulty = models.CharField(
+        max_length=30,
+        default='Средняя',
+        verbose_name='Сложность'
+    )
+
+    features = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name='Что использует'
+    )
+
+    use_cases = models.ManyToManyField(
+        TemplateUseCase,
+        blank=True,
+        related_name='templates',
+        verbose_name='Для чего подходит'
+    )
+
+    CATEGORY_CHOICES = [
+        ('ui', 'UI-компоненты'),
+        ('animation', 'Анимации'),
+        ('carousel', 'Карусели'),
+        ('form', 'Формы'),
+        ('auth', 'Авторизация'),
+        ('other', 'Другое'),
+    ]
+
+    title = models.CharField(max_length=150, verbose_name='Название')
+    slug = models.SlugField(max_length=150, unique=True, verbose_name='URL-адрес')
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES,
+        default='ui',
+        verbose_name='Категория'
+    )
+
+    short_description = models.TextField(verbose_name='Краткое описание')
+    cover = models.ImageField(
+        upload_to='template_demos/',
+        blank=True,
+        null=True,
+        verbose_name='Обложка'
+    )
+
+    html_code = models.TextField(blank=True, verbose_name='HTML')
+    css_code = models.TextField(blank=True, verbose_name='CSS')
+    js_code = models.TextField(blank=True, verbose_name='JavaScript')
+
+    github_url = models.URLField(blank=True, verbose_name='GitHub')
+    demo_url = models.URLField(blank=True, verbose_name='Демо-ссылка')
+
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано')
+
+    class Meta:
+        verbose_name = 'шаблон'
+        verbose_name_plural = 'Шаблоны'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title

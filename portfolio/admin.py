@@ -9,6 +9,8 @@ from .models import (
     ContactLink,
     Project,
     Certificate,
+    TemplateUseCase,
+    TemplateDemo,
 )
 
 
@@ -108,3 +110,21 @@ class CertificateAdmin(admin.ModelAdmin):
     list_display = ('title', 'organization', 'issue_date', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'organization')
+
+
+@admin.register(TemplateUseCase)
+class TemplateUseCaseAdmin(admin.ModelAdmin):
+    list_display = ('title', 'slug', 'is_active', 'order')
+    list_editable = ('is_active', 'order')
+    prepopulated_fields = {'slug': ('title',)}
+    search_fields = ('title',)
+
+
+@admin.register(TemplateDemo)
+class TemplateDemoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'difficulty', 'is_published', 'order')
+    filter_horizontal = ('use_cases',)
+    list_filter = ('category', 'is_published')
+    search_fields = ('title', 'short_description')
+    prepopulated_fields = {'slug': ('title',)}
+    list_editable = ('is_published', 'order')
