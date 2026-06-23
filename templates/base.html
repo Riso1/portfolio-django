@@ -136,13 +136,23 @@
         <footer class="site-footer">
             <div class="container">
                 <div class="site-footer__inner">
-                    <div>
+                    <div class="site-footer__copy">
                         {% if text_blocks.footer_text %}
                             {{ text_blocks.footer_text.content|linebreaks }}
                         {% else %}
                             <p>© {{ settings.full_name }}</p>
                         {% endif %}
                     </div>
+
+                    {% if legal_documents %}
+                        <div class="site-footer__legal">
+                            {% for document in legal_documents %}
+                                <a href="{% url 'legal_document' document.slug %}">
+                                    {{ document.title }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
                     <div class="site-footer__links">
                         {% for contact in contact_links %}
@@ -155,16 +165,6 @@
                             </a>
                         {% endfor %}
                     </div>
-
-                    {% if legal_documents %}
-                        <div class="site-footer__legal">
-                            {% for document in legal_documents %}
-                                <a href="{% url 'legal_document' document.slug %}">
-                                    {{ document.title }}
-                                </a>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </footer>
