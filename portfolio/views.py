@@ -18,6 +18,7 @@ from .models import (
     LegalDocument,
     ProjectOrder,
     PaymentConfirmation,
+    ClientDocument,
 )
 from django.http import HttpResponse
 from django.urls import reverse
@@ -352,3 +353,20 @@ def legal_document(request, slug):
     }
 
     return render(request, 'portfolio/legal_document.html', context)
+
+
+def client_documents(request):
+    documents = ClientDocument.objects.filter(is_published=True).order_by('order', 'title')
+
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'documents': documents,
+        'menu_sections': PageSection.objects.filter(show_in_menu=True, is_published=True).order_by('order'),
+        'text_blocks': {
+            block.key: block for block in TextBlock.objects.all()
+        },
+        'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
+    }
+
+    return render(request, 'portfolio/client_documents.html', context)

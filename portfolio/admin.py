@@ -24,6 +24,7 @@ from .models import (
     OrderPaymentSettings,
     LegalDocument,
     PaymentConfirmation,
+    ClientDocument,
 )
 
 
@@ -240,4 +241,12 @@ class LegalDocumentAdmin(admin.ModelAdmin):
 class PaymentConfirmationAdmin(admin.ModelAdmin):
     list_display = ('name', 'contact', 'amount', 'created_at')
     search_fields = ('name', 'contact', 'comment')
+    readonly_fields = ('created_at',)
+
+    
+@admin.register(ClientDocument)
+class ClientDocumentAdmin(admin.ModelAdmin):
+    list_display = ('title', 'is_published', 'order', 'created_at')
+    list_editable = ('is_published', 'order')
+    search_fields = ('title', 'description')
     readonly_fields = ('created_at',)

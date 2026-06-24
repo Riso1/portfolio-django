@@ -700,3 +700,20 @@ class LegalDocument(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class ClientDocument(models.Model):
+    title = models.CharField(max_length=160, verbose_name='Название')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    file = models.FileField(upload_to='client_documents/', verbose_name='Файл')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    is_published = models.BooleanField(default=True, verbose_name='Опубликовано')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Добавлен')
+
+    class Meta:
+        verbose_name = 'документ для клиента'
+        verbose_name_plural = 'Документы для клиентов'
+        ordering = ['order', 'title']
+
+    def __str__(self):
+        return self.title

@@ -11,6 +11,7 @@ from .views import (
     legal_document,
     payment_page,
     payment_success,
+    client_documents,
 )
 
 urlpatterns = [
@@ -25,4 +26,5 @@ urlpatterns = [
     path('legal/<slug:slug>/', legal_document, name='legal_document'),
     path('payment/', payment_page, name='payment_page'),
     path('payment/success/', payment_success, name='payment_success'),
+    path('client-documents/', client_documents, name='client_documents'),
 ]
