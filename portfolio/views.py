@@ -130,9 +130,17 @@ def sitemap_xml(request):
     return HttpResponse('\n'.join(xml), content_type='application/xml')
 
 
+def get_pwa_icon_url(site_settings):
+    if site_settings and site_settings.pwa_icon:
+        return site_settings.pwa_icon.url
+
+    return static('portfolio/icons/icon-512.png')
+
+
 def manifest_json(request):
     site_settings = SiteSettings.objects.first()
     site_name = 'm0r64n4'
+    pwa_icon_url = get_pwa_icon_url(site_settings)
 
     if site_settings:
         site_name = site_settings.site_title or site_settings.full_name or site_name
@@ -149,19 +157,19 @@ def manifest_json(request):
         'orientation': 'portrait-primary',
         'icons': [
             {
-                'src': static('portfolio/icons/icon-192.png'),
+                'src': pwa_icon_url,
                 'sizes': '192x192',
                 'type': 'image/png',
                 'purpose': 'any',
             },
             {
-                'src': static('portfolio/icons/icon-512.png'),
+                'src': pwa_icon_url,
                 'sizes': '512x512',
                 'type': 'image/png',
                 'purpose': 'any',
             },
             {
-                'src': static('portfolio/icons/maskable-512.png'),
+                'src': pwa_icon_url,
                 'sizes': '512x512',
                 'type': 'image/png',
                 'purpose': 'maskable',
@@ -178,11 +186,14 @@ def manifest_json(request):
 
 @never_cache
 def service_worker_js(request):
+    site_settings = SiteSettings.objects.first()
+
     response = render(
         request,
         'portfolio/service-worker.js',
         {
             'cache_version': 'portfolio-pwa-v1',
+            'pwa_icon_url': get_pwa_icon_url(site_settings),
         },
         content_type='application/javascript',
     )

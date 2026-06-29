@@ -31,6 +31,13 @@ class SiteSettings(models.Model):
         verbose_name='Favicon'
     )
 
+    pwa_icon = models.ImageField(
+        upload_to='pwa/',
+        blank=True,
+        null=True,
+        verbose_name='PWA-иконка'
+    )
+
     og_image = models.ImageField(
         upload_to='og/',
         blank=True,

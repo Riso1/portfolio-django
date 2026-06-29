@@ -5,6 +5,7 @@ const PRECACHE_URLS = [
     '{% url "home" %}',
     OFFLINE_URL,
     '{% static "portfolio/css/style.css" %}',
+    '{{ pwa_icon_url }}',
     '{% static "portfolio/icons/icon-192.png" %}',
     '{% static "portfolio/icons/icon-512.png" %}',
     '{% static "portfolio/icons/maskable-512.png" %}'

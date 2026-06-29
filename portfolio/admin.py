@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group, User
+from django.utils.html import format_html
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 
@@ -120,10 +121,22 @@ class ContactLinkAdmin(ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(ModelAdmin):
-    list_display = ('full_name', 'position', 'email')
+    list_display = ('full_name', 'position', 'email', 'pwa_icon_preview')
+    readonly_fields = ('pwa_icon_preview',)
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
+
+    def pwa_icon_preview(self, obj):
+        if not obj or not obj.pwa_icon:
+            return 'Не загружена'
+
+        return format_html(
+            '<img src="{}" style="width:96px;height:96px;object-fit:cover;border-radius:24px;">',
+            obj.pwa_icon.url,
+        )
+
+    pwa_icon_preview.short_description = 'PWA-иконка'
 
 
 @admin.register(Project)
