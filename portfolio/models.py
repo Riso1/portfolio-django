@@ -38,6 +38,13 @@ class SiteSettings(models.Model):
         verbose_name='PWA-иконка'
     )
 
+    admin_pwa_icon = models.ImageField(
+        upload_to='pwa/admin/',
+        blank=True,
+        null=True,
+        verbose_name='PWA-иконка админки'
+    )
+
     og_image = models.ImageField(
         upload_to='og/',
         blank=True,

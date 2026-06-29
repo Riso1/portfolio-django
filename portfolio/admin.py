@@ -121,8 +121,8 @@ class ContactLinkAdmin(ModelAdmin):
 
 @admin.register(SiteSettings)
 class SiteSettingsAdmin(ModelAdmin):
-    list_display = ('full_name', 'position', 'email', 'pwa_icon_preview')
-    readonly_fields = ('pwa_icon_preview',)
+    list_display = ('full_name', 'position', 'email', 'pwa_icon_preview', 'admin_pwa_icon_preview')
+    readonly_fields = ('pwa_icon_preview', 'admin_pwa_icon_preview')
 
     def has_add_permission(self, request):
         return not SiteSettings.objects.exists()
@@ -137,6 +137,17 @@ class SiteSettingsAdmin(ModelAdmin):
         )
 
     pwa_icon_preview.short_description = 'PWA-иконка'
+
+    def admin_pwa_icon_preview(self, obj):
+        if not obj or not obj.admin_pwa_icon:
+            return 'Не загружена'
+
+        return format_html(
+            '<img src="{}" style="width:96px;height:96px;object-fit:cover;border-radius:24px;">',
+            obj.admin_pwa_icon.url,
+        )
+
+    admin_pwa_icon_preview.short_description = 'PWA-иконка админки'
 
 
 @admin.register(Project)

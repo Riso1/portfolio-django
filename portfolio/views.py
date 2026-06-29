@@ -137,6 +137,16 @@ def get_pwa_icon_url(site_settings):
     return static('portfolio/icons/icon-512.png')
 
 
+def get_admin_pwa_icon_url(site_settings):
+    if site_settings and site_settings.admin_pwa_icon:
+        return site_settings.admin_pwa_icon.url
+
+    if site_settings and site_settings.pwa_icon:
+        return site_settings.pwa_icon.url
+
+    return static('portfolio/icons/icon-512.png')
+
+
 def manifest_json(request):
     site_settings = SiteSettings.objects.first()
     site_name = 'm0r64n4'
@@ -182,6 +192,48 @@ def manifest_json(request):
         content_type='application/manifest+json',
         json_dumps_params={'ensure_ascii': False},
     )
+
+
+def admin_manifest_json(request):
+    site_settings = SiteSettings.objects.first()
+    icon_url = get_admin_pwa_icon_url(site_settings)
+
+    manifest = {
+        'name': 'm0r64n4 admin',
+        'short_name': 'Admin',
+        'description': 'Админ-панель сайта m0r64n4',
+        'start_url': reverse('admin:index'),
+        'scope': '/admin/',
+        'display': 'standalone',
+        'background_color': '#0f172a',
+        'theme_color': '#0f172a',
+        'orientation': 'portrait-primary',
+        'icons': [
+            {
+                'src': icon_url,
+                'sizes': '512x512',
+                'type': 'image/png',
+                'purpose': 'any',
+            },
+            {
+                'src': icon_url,
+                'sizes': '512x512',
+                'type': 'image/png',
+                'purpose': 'maskable',
+            },
+        ],
+    }
+
+    return JsonResponse(
+        manifest,
+        content_type='application/manifest+json',
+        json_dumps_params={'ensure_ascii': False},
+    )
+
+
+def admin_apple_touch_icon(request):
+    site_settings = SiteSettings.objects.first()
+    return redirect(get_admin_pwa_icon_url(site_settings))
 
 
 @never_cache

@@ -45,8 +45,13 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
     const request = event.request;
+    const url = new URL(request.url);
 
     if (request.method !== 'GET') {
+        return;
+    }
+
+    if (url.pathname.startsWith('/admin/')) {
         return;
     }
 

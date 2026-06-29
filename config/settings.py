@@ -58,6 +58,9 @@ UNFOLD = {
     'STYLES': [
         lambda request: static('portfolio/css/admin.css'),
     ],
+    'SCRIPTS': [
+        lambda request: static('portfolio/js/admin-pwa.js'),
+    ],
     'SIDEBAR': {
         'show_search': True,
         'show_all_applications': True,
