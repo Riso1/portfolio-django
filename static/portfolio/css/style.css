@@ -1582,3 +1582,135 @@ body {
         padding-top: 68px;
     }
 }
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+    overscroll-behavior-x: none;
+}
+
+@supports (overflow-x: clip) {
+    html,
+    body,
+    .site-header,
+    .project-order-section,
+    .project-order {
+        overflow-x: clip !important;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 0;
+    position: relative;
+}
+
+.site-header,
+.project-order-section,
+.project-order,
+.project-order__hero,
+.project-order__grid,
+.project-order__main,
+.order-step,
+.project-order__summary,
+.order-type,
+.order-choice-grid label,
+.order-options label,
+.order-fields,
+.order-fields input,
+.order-fields textarea,
+.order-other,
+.order-prepayment,
+.order-payment-methods,
+.order-consent__label,
+.order-consent__label span {
+    max-width: 100%;
+    min-width: 0;
+}
+
+.project-order-section {
+    overflow: hidden;
+}
+
+.project-order__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
+.order-type-grid,
+.order-terms__cards,
+.order-choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.order-options label {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.order-summary-list p,
+.order-price,
+.order-consent__label span {
+    overflow-wrap: anywhere;
+}
+
+.project-order__summary {
+    contain: paint;
+}
+
+@media (max-width: 900px) {
+    .project-order__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .project-order-section {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .project-order__hero,
+    .project-order__grid {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .order-step,
+    .project-order__summary {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px 16px;
+    }
+
+    .order-type-grid,
+    .order-terms__cards,
+    .order-choice-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .order-options label {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .order-options strong {
+        grid-column: 2;
+    }
+
+    .order-price {
+        font-size: clamp(38px, 15vw, 58px);
+    }
+
+    .order-prepayment div {
+        flex-wrap: wrap;
+    }
+}

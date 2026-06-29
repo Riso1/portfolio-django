@@ -244,7 +244,7 @@ def service_worker_js(request):
         request,
         'portfolio/service-worker.js',
         {
-            'cache_version': 'portfolio-pwa-v1',
+            'cache_version': 'portfolio-pwa-v10',
             'pwa_icon_url': get_pwa_icon_url(site_settings),
         },
         content_type='application/javascript',
