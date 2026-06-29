@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.urls import reverse_lazy
+from django.templatetags.static import static
+from django.utils.translation import gettext_lazy as _
 
 load_dotenv()
 
@@ -35,6 +38,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 # Application definition
 
 INSTALLED_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +48,132 @@ INSTALLED_APPS = [
 
     'portfolio',
 ]
+
+UNFOLD = {
+    'SITE_TITLE': 'm0r64n4 admin',
+    'SITE_HEADER': 'm0r64n4',
+    'SITE_SUBHEADER': 'Управление сайтом и заявками',
+    'SITE_URL': '/',
+    'SITE_SYMBOL': 'code_blocks',
+    'STYLES': [
+        lambda request: static('portfolio/css/admin.css'),
+    ],
+    'SIDEBAR': {
+        'show_search': True,
+        'show_all_applications': True,
+        'navigation': [
+            {
+                'title': _('Контент сайта'),
+                'separator': True,
+                'items': [
+                    {
+                        'title': _('Настройки сайта'),
+                        'icon': 'settings',
+                        'link': reverse_lazy('admin:portfolio_sitesettings_changelist'),
+                    },
+                    {
+                        'title': _('Секции страницы'),
+                        'icon': 'view_quilt',
+                        'link': reverse_lazy('admin:portfolio_pagesection_changelist'),
+                    },
+                    {
+                        'title': _('Текстовые блоки'),
+                        'icon': 'article',
+                        'link': reverse_lazy('admin:portfolio_textblock_changelist'),
+                    },
+                    {
+                        'title': _('Опыт и образование'),
+                        'icon': 'timeline',
+                        'link': reverse_lazy('admin:portfolio_timelineitem_changelist'),
+                    },
+                    {
+                        'title': _('Технологии'),
+                        'icon': 'terminal',
+                        'link': reverse_lazy('admin:portfolio_technology_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': _('Портфолио'),
+                'separator': True,
+                'items': [
+                    {
+                        'title': _('Проекты'),
+                        'icon': 'work',
+                        'link': reverse_lazy('admin:portfolio_project_changelist'),
+                    },
+                    {
+                        'title': _('Шаблоны'),
+                        'icon': 'dashboard_customize',
+                        'link': reverse_lazy('admin:portfolio_templatedemo_changelist'),
+                    },
+                    {
+                        'title': _('Сертификаты'),
+                        'icon': 'workspace_premium',
+                        'link': reverse_lazy('admin:portfolio_certificate_changelist'),
+                    },
+                    {
+                        'title': _('Документы для клиентов'),
+                        'icon': 'folder_open',
+                        'link': reverse_lazy('admin:portfolio_clientdocument_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': _('Заявки и оплата'),
+                'separator': True,
+                'items': [
+                    {
+                        'title': _('Заявки на проекты'),
+                        'icon': 'mail',
+                        'link': reverse_lazy('admin:portfolio_projectorder_changelist'),
+                    },
+                    {
+                        'title': _('Типы проектов'),
+                        'icon': 'category',
+                        'link': reverse_lazy('admin:portfolio_orderprojecttype_changelist'),
+                    },
+                    {
+                        'title': _('Сроки'),
+                        'icon': 'schedule',
+                        'link': reverse_lazy('admin:portfolio_orderdeadline_changelist'),
+                    },
+                    {
+                        'title': _('Условия работы'),
+                        'icon': 'fact_check',
+                        'link': reverse_lazy('admin:portfolio_orderworkterm_changelist'),
+                    },
+                    {
+                        'title': _('Оплата'),
+                        'icon': 'payments',
+                        'link': reverse_lazy('admin:portfolio_orderpaymentsettings_changelist'),
+                    },
+                    {
+                        'title': _('Подтверждения оплат'),
+                        'icon': 'receipt_long',
+                        'link': reverse_lazy('admin:portfolio_paymentconfirmation_changelist'),
+                    },
+                ],
+            },
+            {
+                'title': _('Служебное'),
+                'separator': True,
+                'items': [
+                    {
+                        'title': _('Юридическая информация'),
+                        'icon': 'gavel',
+                        'link': reverse_lazy('admin:portfolio_legaldocument_changelist'),
+                    },
+                    {
+                        'title': _('Пользователи'),
+                        'icon': 'group',
+                        'link': reverse_lazy('admin:auth_user_changelist'),
+                    },
+                ],
+            },
+        ],
+    },
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

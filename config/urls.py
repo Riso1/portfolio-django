@@ -19,6 +19,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+admin.site.site_header = 'm0r64n4'
+admin.site.site_title = 'm0r64n4 admin'
+admin.site.index_title = 'Панель управления сайтом'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('portfolio.urls')),

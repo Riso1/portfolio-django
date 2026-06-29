@@ -20,10 +20,12 @@ from .models import (
     PaymentConfirmation,
     ClientDocument,
 )
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
+from django.templatetags.static import static
+from django.views.decorators.cache import never_cache
 
 
 def home(request):
@@ -126,6 +128,80 @@ def sitemap_xml(request):
     xml.append('</urlset>')
 
     return HttpResponse('\n'.join(xml), content_type='application/xml')
+
+
+def manifest_json(request):
+    site_settings = SiteSettings.objects.first()
+    site_name = 'm0r64n4'
+
+    if site_settings:
+        site_name = site_settings.site_title or site_settings.full_name or site_name
+
+    manifest = {
+        'name': site_name,
+        'short_name': 'm0r64n4',
+        'description': 'Портфолио Python Backend Developer',
+        'start_url': reverse('home'),
+        'scope': '/',
+        'display': 'standalone',
+        'background_color': '#0f172a',
+        'theme_color': '#2563eb',
+        'orientation': 'portrait-primary',
+        'icons': [
+            {
+                'src': static('portfolio/icons/icon-192.png'),
+                'sizes': '192x192',
+                'type': 'image/png',
+                'purpose': 'any',
+            },
+            {
+                'src': static('portfolio/icons/icon-512.png'),
+                'sizes': '512x512',
+                'type': 'image/png',
+                'purpose': 'any',
+            },
+            {
+                'src': static('portfolio/icons/maskable-512.png'),
+                'sizes': '512x512',
+                'type': 'image/png',
+                'purpose': 'maskable',
+            },
+        ],
+    }
+
+    return JsonResponse(
+        manifest,
+        content_type='application/manifest+json',
+        json_dumps_params={'ensure_ascii': False},
+    )
+
+
+@never_cache
+def service_worker_js(request):
+    response = render(
+        request,
+        'portfolio/service-worker.js',
+        {
+            'cache_version': 'portfolio-pwa-v1',
+        },
+        content_type='application/javascript',
+    )
+    response['Service-Worker-Allowed'] = '/'
+    return response
+
+
+def offline_page(request):
+    context = {
+        'settings': SiteSettings.objects.first(),
+        'menu_sections': PageSection.objects.filter(show_in_menu=True, is_published=True).order_by('order'),
+        'text_blocks': {
+            block.key: block for block in TextBlock.objects.all()
+        },
+        'contact_links': ContactLink.objects.filter(is_published=True).order_by('order'),
+        'legal_documents': LegalDocument.objects.filter(is_published=True).order_by('title'),
+    }
+
+    return render(request, 'portfolio/offline.html', context)
 
 
 def template_demo_list(request):

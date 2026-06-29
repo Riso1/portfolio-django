@@ -1,4 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import Group, User
+from unfold.admin import ModelAdmin, TabularInline
+from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
+
 from .models import (
     SiteSettings,
     PageSection,
@@ -28,15 +34,38 @@ from .models import (
 )
 
 
+try:
+    admin.site.unregister(User)
+except admin.sites.NotRegistered:
+    pass
+
+try:
+    admin.site.unregister(Group)
+except admin.sites.NotRegistered:
+    pass
+
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin, ModelAdmin):
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+
+
+@admin.register(Group)
+class GroupAdmin(BaseGroupAdmin, ModelAdmin):
+    pass
+
+
 @admin.register(TextBlock)
-class TextBlockAdmin(admin.ModelAdmin):
+class TextBlockAdmin(ModelAdmin):
     list_display = ('title', 'key', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'key', 'content')
 
 
 @admin.register(TimelineItem)
-class TimelineItemAdmin(admin.ModelAdmin):
+class TimelineItemAdmin(ModelAdmin):
     list_display = (
         'title',
         'category',
@@ -53,7 +82,7 @@ class TimelineItemAdmin(admin.ModelAdmin):
 
 
 @admin.register(PageSection)
-class PageSectionAdmin(admin.ModelAdmin):
+class PageSectionAdmin(ModelAdmin):
     list_display = (
         'title',
         'key',
@@ -70,27 +99,27 @@ class PageSectionAdmin(admin.ModelAdmin):
 
 
 @admin.register(Technology)
-class TechnologyAdmin(admin.ModelAdmin):
+class TechnologyAdmin(ModelAdmin):
     list_display = ('title', 'icon_class', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title',)
 
 
 @admin.register(HeroStat)
-class HeroStatAdmin(admin.ModelAdmin):
+class HeroStatAdmin(ModelAdmin):
     list_display = ('value', 'label', 'is_published', 'order')
     list_editable = ('is_published', 'order')
 
 
 @admin.register(ContactLink)
-class ContactLinkAdmin(admin.ModelAdmin):
+class ContactLinkAdmin(ModelAdmin):
     list_display = ('title', 'url', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'url')
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(ModelAdmin):
     list_display = ('full_name', 'position', 'email')
 
     def has_add_permission(self, request):
@@ -98,7 +127,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 
 @admin.register(Project)
-class ProjectAdmin(admin.ModelAdmin):
+class ProjectAdmin(ModelAdmin):
     list_display = (
         'title',
         'stack',
@@ -120,14 +149,14 @@ class ProjectAdmin(admin.ModelAdmin):
 
 
 @admin.register(Certificate)
-class CertificateAdmin(admin.ModelAdmin):
+class CertificateAdmin(ModelAdmin):
     list_display = ('title', 'organization', 'issue_date', 'is_published', 'order')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'organization')
 
 
 @admin.register(TemplateUseCase)
-class TemplateUseCaseAdmin(admin.ModelAdmin):
+class TemplateUseCaseAdmin(ModelAdmin):
     list_display = ('title', 'slug', 'is_active', 'order')
     list_editable = ('is_active', 'order')
     prepopulated_fields = {'slug': ('title',)}
@@ -135,7 +164,7 @@ class TemplateUseCaseAdmin(admin.ModelAdmin):
 
 
 @admin.register(TemplateDemo)
-class TemplateDemoAdmin(admin.ModelAdmin):
+class TemplateDemoAdmin(ModelAdmin):
     list_display = ('title', 'category', 'difficulty', 'is_published', 'order')
     filter_horizontal = ('use_cases',)
     list_filter = ('category', 'is_published')
@@ -145,24 +174,24 @@ class TemplateDemoAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProjectOrder)
-class ProjectOrderAdmin(admin.ModelAdmin):
+class ProjectOrderAdmin(ModelAdmin):
     list_display = ('name', 'project_type', 'budget', 'status', 'created_at')
     list_filter = ('project_type', 'status', 'created_at')
     search_fields = ('name', 'contact', 'description')
     readonly_fields = ('created_at',)
 
 
-class OrderOptionInline(admin.TabularInline):
+class OrderOptionInline(TabularInline):
     model = OrderOption
     extra = 1
 
 
-class OrderOptionGroupInline(admin.TabularInline):
+class OrderOptionGroupInline(TabularInline):
     model = OrderOptionGroup
     extra = 1
 
 
-class BaseOrderGroupAdmin(admin.ModelAdmin):
+class BaseOrderGroupAdmin(ModelAdmin):
     list_display = ('title', 'input_type', 'is_active', 'order')
     list_editable = ('is_active', 'order')
     inlines = [OrderOptionInline]
@@ -205,12 +234,12 @@ class OrderImprovementGroupAdmin(BaseOrderGroupAdmin):
 
 
 @admin.register(OrderPaymentSettings)
-class OrderPaymentSettingsAdmin(admin.ModelAdmin):
+class OrderPaymentSettingsAdmin(ModelAdmin):
     list_display = ('title', 'bank_name', 'recipient_name')
 
 
 @admin.register(OrderProjectType)
-class OrderProjectTypeAdmin(admin.ModelAdmin):
+class OrderProjectTypeAdmin(ModelAdmin):
     list_display = ('title', 'slug', 'base_price', 'is_active', 'order')
     list_editable = ('base_price', 'is_active', 'order')
     prepopulated_fields = {'slug': ('title',)}
@@ -218,19 +247,19 @@ class OrderProjectTypeAdmin(admin.ModelAdmin):
 
 
 @admin.register(OrderDeadline)
-class OrderDeadlineAdmin(admin.ModelAdmin):
+class OrderDeadlineAdmin(ModelAdmin):
     list_display = ('title', 'multiplier', 'is_active', 'order')
     list_editable = ('multiplier', 'is_active', 'order')
 
 
 @admin.register(OrderWorkTerm)
-class OrderWorkTermAdmin(admin.ModelAdmin):
+class OrderWorkTermAdmin(ModelAdmin):
     list_display = ('title', 'is_active', 'order')
     list_editable = ('is_active', 'order')
 
 
 @admin.register(LegalDocument)
-class LegalDocumentAdmin(admin.ModelAdmin):
+class LegalDocumentAdmin(ModelAdmin):
     list_display = ('title', 'slug', 'is_published', 'updated_at')
     list_editable = ('is_published',)
     prepopulated_fields = {'slug': ('title',)}
@@ -238,14 +267,14 @@ class LegalDocumentAdmin(admin.ModelAdmin):
 
 
 @admin.register(PaymentConfirmation)
-class PaymentConfirmationAdmin(admin.ModelAdmin):
+class PaymentConfirmationAdmin(ModelAdmin):
     list_display = ('name', 'contact', 'amount', 'created_at')
     search_fields = ('name', 'contact', 'comment')
     readonly_fields = ('created_at',)
 
     
 @admin.register(ClientDocument)
-class ClientDocumentAdmin(admin.ModelAdmin):
+class ClientDocumentAdmin(ModelAdmin):
     list_display = ('title', 'is_published', 'order', 'created_at')
     list_editable = ('is_published', 'order')
     search_fields = ('title', 'description')
