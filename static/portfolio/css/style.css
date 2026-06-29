@@ -1,3 +1,23 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+@supports (overflow-x: clip) {
+    html,
+    body {
+        overflow-x: clip;
+    }
+}
+
 body {
     background-color: #0f172a;
     color: #f8fafc;
@@ -775,6 +795,8 @@ section[id] {
 }
 
 .project-order {
+    width: 100%;
+    max-width: 100%;
     border-radius: 28px;
     overflow: hidden;
     background:
@@ -821,17 +843,20 @@ section[id] {
     gap: 24px;
     padding: 0 46px 46px;
     align-items: start;
+    min-width: 0;
 }
 
 .project-order__main {
     display: grid;
     gap: 22px;
+    min-width: 0;
 }
 
 .order-step,
 .project-order__summary,
 .order-success,
 .privacy-page {
+    min-width: 0;
     border: 1px solid rgba(148, 163, 184, 0.28);
     border-radius: 26px;
     background: rgba(15, 23, 42, 0.78);
@@ -856,6 +881,7 @@ section[id] {
 }
 
 .order-type {
+    min-width: 0;
     border: 1px solid #334155;
     border-radius: 18px;
     padding: 18px;
@@ -899,6 +925,7 @@ section[id] {
     grid-template-columns: auto 1fr auto;
     gap: 12px;
     align-items: center;
+    min-width: 0;
     border: 1px solid #334155;
     border-radius: 16px;
     padding: 14px;
@@ -913,6 +940,7 @@ section[id] {
 
 .order-options strong {
     color: #86efac;
+    white-space: nowrap;
 }
 
 .order-select,
@@ -1055,6 +1083,7 @@ section[id] {
     padding: 13px;
     color: #dbeafe;
     background: #020617;
+    overflow-wrap: anywhere;
 }
 
 .order-note {
@@ -1143,6 +1172,7 @@ section[id] {
 }
 
 .order-choice-grid label {
+    min-width: 0;
     border: 1px solid #334155;
     border-radius: 16px;
     padding: 14px;
@@ -1349,13 +1379,15 @@ section[id] {
     }
 }
 
-html,
-body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
 @media (max-width: 768px) {
+    .project-order-section {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
     .project-order {
         border-radius: 22px;
         overflow: hidden;
@@ -1370,17 +1402,34 @@ body {
     .project-order__hero {
         width: 100%;
         max-width: 100%;
+        min-width: 0;
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
     .order-step,
     .project-order__summary {
         min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 20px 16px;
     }
 
     .order-type,
     .order-choice-grid label,
     .order-options label {
         min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .order-price {
+        font-size: clamp(38px, 15vw, 58px);
+        overflow-wrap: anywhere;
+    }
+
+    .order-prepayment div {
+        flex-wrap: wrap;
     }
 }
 
